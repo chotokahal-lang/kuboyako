@@ -1,0 +1,7 @@
+name = "kuboyako-ultimate"
+compatibility_date = "2024-05-03"
+
+[pages]
+pages_build_output_dir = "dist"
+build_command = "npm run build"
+version = 2

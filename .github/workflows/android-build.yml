@@ -35,11 +35,14 @@ jobs:
       - name: Add and Sync Android Platform
         run: |
           npx cap add android
+          # Customize App Name
+          sed -i 's/My App/KUBOYAKO/g' android/app/src/main/res/values/strings.xml
           npx cap sync android
 
       - name: Build Android Project
         run: |
           cd android
+          chmod +x gradlew
           ./gradlew assembleDebug --stacktrace
 
       - name: List Build Outputs (Debug)

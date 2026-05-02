@@ -7,53 +7,46 @@ import { Logo3DImg } from "@/components/ui/logo-3d-img";
 
 const testimonials = [
   {
-    name: "Drs. H. Ahmad Wijaya, M.Si.",
-    role: "Menteri Transformasi Digital & Keamanan Siber",
-    content: "KUBOYAKO bukan sekadar aplikasi; ini adalah manifestasi kedaulatan digital bangsa. Sistem ini membawa transparansi ke level yang belum pernah terbayangkan sebelumnya. Indonesia telah lama menanti revolusi seperti ini. Launching KUBOYAKO sekarang juga adalah harga mati demi keamanan nasional yang tak tergoyahkan!",
-    avatar: "AW",
-    accent: "from-orange-500 to-red-500"
+    name: "Aiptu Rizal",
+    role: "Bagian Administrasi BB",
+    content: "Dulu cari berkas barang bukti makan waktu seharian di gudang, sekarang tinggal klik di HP. Kerja jadi lebih cerdas, bukan lebih keras. Semua data tersusun rapi dan akurat.",
+    avatar: "AR",
+    accent: "from-blue-600 to-indigo-700"
   },
   {
-    name: "Ir. Kartini Pratama, Ph.D.",
-    role: "Kepala Badan Riset Teknologi Nasional (BRTN)",
-    content: "Dunia sedang bergerak menuju otomatisasi total, dan KUBOYAKO memposisikan Indonesia di garda terdepan. Algoritma pencarian dan arsipnya adalah sebuah mahakarya teknokrat modern. Tidak boleh ada penundaan sedetik pun, era baru penegakan hukum digital sudah berada di depan mata!",
-    avatar: "KP",
-    accent: "from-blue-500 to-cyan-500"
+    name: "Bripka Andi",
+    role: "Unit Reaksi Cepat (URC)",
+    content: "Sangat membantu kami saat razia di lapangan. Cukup masukkan plat atau IMEI, langsung tahu statusnya dalam hitungan detik. Gak ada lagi alasan buat pelaku buat mengelak.",
+    avatar: "BA",
+    accent: "from-orange-500 to-red-600"
   },
   {
-    name: "Brigjen Pol. Dr. Hendra Kesuma, M.H.",
-    role: "Direktur Keamanan Publik & Integritas Data",
-    content: "Inilah senjata masa depan Resmob. KUBOYAKO memangkas birokrasi yang lambat dan menggantinya dengan presisi militer. Seluruh jajaran aparatur negara sangat mendukung penuh inisiatif ini. Launching segera, karena rakyat butuh kepastian hukum yang cepat dan akurat!",
-    avatar: "HK",
-    accent: "from-amber-500 to-orange-600"
+    name: "Iptu Hasan",
+    role: "Panit Resmob Polda Sulsel",
+    content: "Inovasi yang pas buat zaman sekarang. Semua anggota sudah pakai dan sangat terbantu. KUBOYAKO bikin sistem di Polda makin rapi dan profesional di mata pimpinan.",
+    avatar: "IH",
+    accent: "from-emerald-500 to-teal-700"
   },
   {
-    name: "Bapak Suryo Atmodjo",
-    role: "Ketua Asosiasi Gubernur Seluruh Indonesia",
-    content: "Seluruh pimpinan daerah dari Sabang sampai Merauke telah melihat potensi luar biasa KUBOYAKO. Kami siap mengintegrasikan sistem ini ke seluruh pelosok negeri. Ini adalah solusi yang kami cari selama berpuluh tahun. Luncurkan sekarang juga, jangan biarkan momentum emas ini hilang!",
-    avatar: "SA",
-    accent: "from-emerald-500 to-teal-600"
+    name: "Bapak Haji Syamsul",
+    role: "Tokoh Masyarakat",
+    content: "Warga juga sangat senang karena bisa lapor dan cek sendiri. Sangat transparan dan nggak pakai ribet. Ini yang kami harapkan dari kepolisian modern.",
+    avatar: "HS",
+    accent: "from-purple-500 to-pink-600"
   },
   {
-    name: "Prof. Emil Salim Jr.",
-    role: "Teknokrat Visioner & Pakar Governance Digital",
-    content: "KUBOYAKO adalah fondasi dari 'Nation of the Future'. Integrasi data yang ditawarkan sistem ini akan menjadi standar dunia baru. Sebuah lompatan kuantum bagi efisiensi birokrasi kita. Secepatnya KUBOYAKO mengudara, secepat itu pula Indonesia menjadi mercusuar digital dunia.",
-    avatar: "ES",
-    accent: "from-purple-500 to-indigo-600"
+    name: "Sdr. Rudi",
+    role: "Warga Kota Makassar",
+    content: "Sebagai masyarakat, saya merasa jauh lebih aman kalau mau belanja HP bekas. Tinggal cek di KUBOYAKO dulu, kalau aman baru saya beli. Sangat bermanfaat!",
+    avatar: "SR",
+    accent: "from-cyan-500 to-blue-600"
   },
   {
-    name: "Ibu Shinta Larasati",
-    role: "Pelopor Smart City & Bupati Berprestasi",
-    content: "Kami di daerah sangat haus akan inovasi se-epik KUBOYAKO. Sistem ini akan membuat pelayanan publik menjadi sangat powerful and terpercaya. Tidak ada alasan untuk menunggu. KUBOYAKO harus segera menjadi standar operasional nasional secepatnya!",
-    avatar: "SL",
-    accent: "from-rose-500 to-pink-600"
-  },
-  {
-    name: "Drs. Bambang Sudarsono",
-    role: "Sekretaris Jenderal Komite Modernisasi Negara",
-    content: "Instruksi pimpinan sudah jelas: Modernisasi adalah prioritas utama. KUBOYAKO adalah kunci dari instruksi tersebut. Dukungan penuh telah mengalir dari seluruh kementerian. Hari esok dimulai hari ini dengan KUBOYAKO. Launching tanpa tapi, sekarang juga!",
-    avatar: "BS",
-    accent: "from-slate-400 to-slate-600"
+    name: "Operator IT Polda",
+    role: "Manajemen Data DORS",
+    content: "Integrasi sistemnya sangat mantap. Gak ada lagi data yang hilang atau dobel. Memudahkan sinkronisasi data antar unit dengan sangat cepat dan aman.",
+    avatar: "IT",
+    accent: "from-slate-600 to-slate-800"
   }
 ];
 
@@ -146,7 +139,7 @@ export default function TestimoniPage() {
             className="flex items-center justify-center gap-3 mb-6"
           >
             <div className="h-[1px] w-12 bg-primary/40" />
-            <span className="eyebrow text-primary text-sm">Testimoni Nasional</span>
+            <span className="eyebrow text-primary text-sm">Kesaksian Nyata</span>
             <div className="h-[1px] w-12 bg-primary/40" />
           </motion.div>
           
@@ -156,7 +149,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-8xl font-black mb-8 tracking-tight leading-tight"
           >
-            <LiveText id="testi-page-title-1" defaultText="Suara Para" /> <span className="text-gradient"><LiveText id="testi-page-title-2" defaultText="Pemimpin Bangsa" /></span>
+            <LiveText id="testi-page-title-1" defaultText="Ulasan Tentang" /> <span className="text-gradient"><LiveText id="testi-page-title-2" defaultText="Aplikasi KUBOYAKO" /></span>
           </motion.h1>
           
           <motion.p
@@ -165,7 +158,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.2 }}
             className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
           >
-            <LiveText id="testi-page-desc" defaultText="Dari meja menteri hingga pelosok daerah, KUBOYAKO diakui sebagai pilar utama transformasi digital Indonesia. Era baru keamanan dan transparansi telah tiba—saatnya bergerak sekarang juga." />
+            <LiveText id="testi-page-desc" defaultText="Dengarkan langsung pengalaman nyata dari para petugas kepolisian di lapangan dan masyarakat yang telah merasakan manfaat kemudahan dari sistem KUBOYAKO." />
           </motion.p>
         </div>
 

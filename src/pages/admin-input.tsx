@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle2, Upload, Loader2, Save } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { saveEvidenceItem, VehicleItem, HpItem } from "@/lib/store";
+import { saveEvidenceItem, VehicleItem, HpItem, addLog } from "@/lib/store";
 import { PageHeader } from "@/components/layout/page-header";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
@@ -46,6 +46,7 @@ export default function AdminInput() {
         tglLp: formData.get("tglLp") as string,
         pelapor: formData.get("pelapor") as string,
         lokasiTkp: formData.get("lokasiTkp") as string,
+        asalLp: formData.get("asalLp") as string,
         satker: "POLRESTABES MAKASSAR",
         createdAt: Date.now(),
       };
@@ -76,6 +77,10 @@ export default function AdminInput() {
         };
         saveEvidenceItem(hp);
       }
+
+      const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
+      const itemDesc = tab === "hp" ? formData.get("imei1") : formData.get("noPolisi");
+      addLog(adminNrp, "admin", "SAVE_EVIDENCE", `Mengarsipkan BB ${tab}: ${itemDesc}`);
 
       setLoading(false);
       setSuccess(true);
@@ -126,7 +131,10 @@ export default function AdminInput() {
               <Field label="Tanggal LP" name="tglLp" type="date" required defaultValue={new Date().toISOString().split("T")[0]} />
               <Field label="Pelapor" name="pelapor" required placeholder="Nama lengkap" defaultValue={ocrData?.pelapor} />
             </div>
-            <Field label="Lokasi TKP" name="lokasiTkp" required placeholder="Jl. Pettarani No. 10" />
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Lokasi TKP" name="lokasiTkp" required placeholder="Jl. Pettarani No. 10" />
+              <Field label="Asal LP (Kesatuan)" name="asalLp" required placeholder="Polsek Panakkukang" />
+            </div>
           </FieldGroup>
         </Section>
 

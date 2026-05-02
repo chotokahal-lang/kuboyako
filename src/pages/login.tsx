@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
 import { LiveText } from "@/components/ui/live-text";
+import { validateLogin, addLog } from "@/lib/store";
 
 export default function Login() {
   const { type } = useParams();
@@ -23,21 +24,27 @@ export default function Login() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      const valid =
-        credentials.username === "admin" && credentials.password === "poldasulsel";
-      if (valid) {
-        const role = isAdmin ? "admin" : "polri";
+      const user = validateLogin(credentials.username, credentials.password);
+      
+      if (user) {
+        const role = user.role;
         localStorage.setItem("kuboyako_role", role);
+        localStorage.setItem("kuboyako_user_name", user.name);
+        localStorage.setItem("kuboyako_user_nrp", user.nrp);
+        
+        addLog(user.nrp, role, "LOGIN", "Berhasil masuk ke sistem");
+        
         toast({
           title: "Akses Diterima",
-          description: `Selamat datang di sistem KUBOYAKO — ${isAdmin ? "Admin" : "Anggota Polri"}.`,
+          description: `Selamat datang, ${user.name}.`,
         });
-        navigate(isAdmin ? "/admin" : "/user");
+        navigate(role === "admin" ? "/admin" : "/user");
       } else {
+        addLog(credentials.username, "unknown", "LOGIN_FAILED", "Percobaan login gagal");
         toast({
           variant: "destructive",
           title: "Akses Ditolak",
-          description: "NRP / username atau password salah.",
+          description: "NRP atau password salah.",
         });
       }
     }, 1200);

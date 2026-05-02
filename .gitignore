@@ -8,3 +8,6 @@ dist/
 *.swp
 *.swo
 *~
+
+BACKUP_FINAL/
+BACKUP_TEMP/

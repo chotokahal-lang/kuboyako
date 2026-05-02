@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogOut, ChevronRight, ShieldCheck, Bell } from "lucide-react";
-import { getEvidenceData } from "@/lib/store";
+import { getEvidenceData, EvidenceItem } from "@/lib/store";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
 import { Logo3DImg } from "@/components/ui/logo-3d-img";
 import { getUnreadCount } from "./notifications";
 import { LiveText } from "@/components/ui/live-text";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -23,6 +24,12 @@ export default function AdminDashboard() {
     });
     setUnread(getUnreadCount("admin"));
   }, []);
+
+  const chartData = [
+    { name: 'Mobil', count: stats.mobil, color: '#3b82f6' },
+    { name: 'Motor', count: stats.motor, color: '#60a5fa' },
+    { name: 'HP', count: stats.hp, color: '#fbbf24' },
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,6 +52,8 @@ export default function AdminDashboard() {
   const actions = [
     { title: "Input Manual", desc: "Catat data barang bukti baru", href: "/admin/input", icon: icons3d.form },
     { title: "Scan Foto LP", desc: "Ekstraksi otomatis dari foto LP", href: "/admin/scan", icon: icons3d.scan },
+    { title: "Manajemen Akun", desc: "Kelola akun Anggota Polri", href: "/admin/accounts", icon: icons3d.user },
+    { title: "Log Aktivitas", desc: "Riwayat penggunaan sistem", href: "/admin/logs", icon: icons3d.archive },
     { title: "Status Penginputan", desc: "Riwayat & arsip data BB", href: "/admin/riwayat", icon: icons3d.archive },
   ];
 
@@ -119,11 +128,52 @@ export default function AdminDashboard() {
         ))}
       </section>
 
-      {/* Action list */}
+      {/* Visual Analytics */}
+      <section className="px-6 mb-8 relative z-10">
+        <div className="flex justify-between items-center mb-4 px-1">
+          <h2 className="eyebrow"><LiveText as="span" id="admin-section-stats" defaultText="Analitik Tren BB" /></h2>
+          <span className="text-[10px] text-muted-foreground/60">Live Data</span>
+        </div>
+        
+        <div className="surface-elevated rounded-3xl p-5 h-64 shadow-soft border border-white/5">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+              <XAxis 
+                dataKey="name" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10, fontWeight: 600 }}
+                dy={10}
+              />
+              <YAxis 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }}
+              />
+              <Tooltip 
+                cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                contentStyle={{ 
+                  backgroundColor: 'rgba(20,20,20,0.8)', 
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '12px',
+                  backdropFilter: 'blur(10px)',
+                  fontSize: '11px'
+                }}
+              />
+              <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={40}>
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
       <section className="px-6 flex flex-col gap-4 relative z-10">
         <div className="flex justify-between items-center mb-1 px-1">
           <h2 className="eyebrow"><LiveText as="span" id="admin-section-ops" defaultText="Manajemen Operasional" /></h2>
-          <span className="text-[10px] text-muted-foreground/60"><LiveText as="span" id="admin-module-count" defaultText="3 Modul" /></span>
+          <span className="text-[10px] text-muted-foreground/60"><LiveText as="span" id="admin-module-count" defaultText="5 Modul" /></span>
         </div>
 
         {actions.map((a, i) => (

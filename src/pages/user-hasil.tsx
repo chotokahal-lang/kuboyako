@@ -12,7 +12,7 @@ import {
   Phone,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { searchEvidence, EvidenceItem } from "@/lib/store";
+import { searchEvidence, EvidenceItem, addLog } from "@/lib/store";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
 import { LiveText } from "@/components/ui/live-text";
@@ -29,8 +29,13 @@ export default function UserHasil() {
   useEffect(() => {
     const timer = setTimeout(() => {
       const decoded = decodeURIComponent(query || "");
-      setResult(searchEvidence(type as any, decoded) || null);
+      const found = searchEvidence(type as any, decoded) || null;
+      setResult(found);
       setLoading(false);
+
+      const userNrp = localStorage.getItem("kuboyako_user_nrp") || "guest";
+      const userRole = localStorage.getItem("kuboyako_role") || "umum";
+      addLog(userNrp, userRole, "SEARCH", `Mencari ${type}: ${decoded} (${found ? "Ditemukan" : "Tidak Ditemukan"})`);
     }, 1600);
     return () => clearTimeout(timer);
   }, [type, query]);
@@ -195,6 +200,7 @@ export default function UserHasil() {
                         }),
                       },
                       { icon: <MapPin className="w-4 h-4" />, label: "Lokasi TKP", val: result!.lokasiTkp },
+                      { icon: <ShieldAlert className="w-4 h-4" />, label: "Asal LP (Kesatuan)", val: result!.asalLp },
                     ].map((it, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <span className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-foreground/70 shrink-0">

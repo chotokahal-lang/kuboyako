@@ -9,6 +9,7 @@ export interface BaseItem {
   pelapor: string;
   lokasiTkp: string;
   satker: string;
+  asalLp: string;
   foto?: string;
   createdAt: number;
 }
@@ -36,6 +37,25 @@ export interface HpItem extends BaseItem {
 
 export type EvidenceItem = VehicleItem | HpItem;
 
+export interface UserAccount {
+  id: string;
+  nrp: string;
+  name: string;
+  unit: string;
+  role: 'admin' | 'polri';
+  password: string;
+  createdAt: number;
+}
+
+export interface SystemLog {
+  id: string;
+  timestamp: number;
+  user: string;
+  role: string;
+  action: string;
+  details: string;
+}
+
 const initialData: EvidenceItem[] = [
   {
     id: "1",
@@ -52,6 +72,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Budi Santoso",
     lokasiTkp: "Jl. AP Pettarani",
     satker: "POLRESTABES MAKASSAR",
+    asalLp: "Polsek Panakkukang",
     createdAt: Date.now() - 100000,
   },
   {
@@ -69,6 +90,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Andi Makkasau",
     lokasiTkp: "Jl. Urip Sumoharjo",
     satker: "RESMOB POLDA SULSEL",
+    asalLp: "Polres Bone",
     createdAt: Date.now() - 50000,
   },
   {
@@ -86,6 +108,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Rahmat",
     lokasiTkp: "Jl. Poros Maros",
     satker: "POLRES MAROS",
+    asalLp: "Polsek Turikale",
     createdAt: Date.now() - 120000,
   },
   {
@@ -103,6 +126,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Sudirman",
     lokasiTkp: "Jl. Poros Takalar",
     satker: "POLRES TAKALAR",
+    asalLp: "Polsek Pattallassang",
     createdAt: Date.now() - 80000,
   },
   {
@@ -120,6 +144,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Ahmad",
     lokasiTkp: "Jl. Boulevard",
     satker: "POLRESTABES MAKASSAR",
+    asalLp: "Polsek Rappocini",
     createdAt: Date.now() - 60000,
   },
   {
@@ -134,6 +159,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Siti Aminah",
     lokasiTkp: "Jl. Sultan Hasanuddin",
     satker: "POLRES GOWA",
+    asalLp: "Polsek Somba Opu",
     createdAt: Date.now() - 10000,
   },
   {
@@ -148,6 +174,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Budi Santoso",
     lokasiTkp: "Jl. AP Pettarani",
     satker: "POLRESTABES MAKASSAR",
+    asalLp: "Polsek Tamalanrea",
     createdAt: Date.now() - 90000,
   },
   {
@@ -162,6 +189,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Andi Makkasau",
     lokasiTkp: "Jl. Urip Sumoharjo",
     satker: "RESMOB POLDA SULSEL",
+    asalLp: "Polres Sidrap",
     createdAt: Date.now() - 40000,
   },
   {
@@ -176,6 +204,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Rahmat",
     lokasiTkp: "Jl. Poros Maros",
     satker: "POLRES MAROS",
+    asalLp: "Polsek Lau",
     createdAt: Date.now() - 110000,
   },
   {
@@ -190,6 +219,7 @@ const initialData: EvidenceItem[] = [
     pelapor: "Sudirman",
     lokasiTkp: "Jl. Poros Takalar",
     satker: "POLRES TAKALAR",
+    asalLp: "Polsek Galesong Utara",
     createdAt: Date.now() - 70000,
   }
 ];
@@ -207,6 +237,21 @@ export function saveEvidenceItem(item: EvidenceItem) {
   const data = getEvidenceData();
   data.push(item);
   localStorage.setItem("kuboyako_evidence", JSON.stringify(data));
+}
+
+export function updateEvidenceItem(item: EvidenceItem) {
+  const data = getEvidenceData();
+  const index = data.findIndex(i => i.id === item.id);
+  if (index !== -1) {
+    data[index] = item;
+    localStorage.setItem("kuboyako_evidence", JSON.stringify(data));
+  }
+}
+
+export function deleteEvidenceItem(id: string) {
+  const data = getEvidenceData();
+  const filtered = data.filter(i => i.id !== id);
+  localStorage.setItem("kuboyako_evidence", JSON.stringify(filtered));
 }
 
 export function searchEvidence(type: SearchType, query: string): EvidenceItem | undefined {
@@ -244,4 +289,72 @@ export function searchEvidence(type: SearchType, query: string): EvidenceItem | 
     
     return false;
   });
+}
+
+// ── ACCOUNT MANAGEMENT ──────────────────────────────────────────
+
+const initialAccounts: UserAccount[] = [
+  {
+    id: "admin-1",
+    nrp: "admin",
+    name: "IRZAL MAKKARAWA, S.H.",
+    unit: "RESMOB POLDA SULSEL",
+    role: "admin",
+    password: "poldasulsel",
+    createdAt: Date.now(),
+  },
+  {
+    id: "polri-1",
+    nrp: "71040001",
+    name: "BUDI SANTOSO",
+    unit: "POLRESTABES MAKASSAR",
+    role: "polri",
+    password: "password123",
+    createdAt: Date.now(),
+  }
+];
+
+export function getUserAccounts(): UserAccount[] {
+  const stored = localStorage.getItem("kuboyako_accounts");
+  if (stored) return JSON.parse(stored);
+  localStorage.setItem("kuboyako_accounts", JSON.stringify(initialAccounts));
+  return initialAccounts;
+}
+
+export function saveUserAccount(account: UserAccount) {
+  const accounts = getUserAccounts();
+  accounts.push(account);
+  localStorage.setItem("kuboyako_accounts", JSON.stringify(accounts));
+}
+
+export function deleteUserAccount(id: string) {
+  const accounts = getUserAccounts();
+  const filtered = accounts.filter(a => a.id !== id);
+  localStorage.setItem("kuboyako_accounts", JSON.stringify(filtered));
+}
+
+export function validateLogin(nrp: string, pass: string): UserAccount | undefined {
+  const accounts = getUserAccounts();
+  return accounts.find(a => a.nrp === nrp && a.password === pass);
+}
+
+// ── LOG MANAGEMENT ─────────────────────────────────────────────
+
+export function getLogs(): SystemLog[] {
+  const stored = localStorage.getItem("kuboyako_logs");
+  return stored ? JSON.parse(stored) : [];
+}
+
+export function addLog(user: string, role: string, action: string, details: string) {
+  const logs = getLogs();
+  const newLog: SystemLog = {
+    id: Math.random().toString(36).slice(2, 11),
+    timestamp: Date.now(),
+    user,
+    role,
+    action,
+    details
+  };
+  logs.unshift(newLog); // Newest first
+  localStorage.setItem("kuboyako_logs", JSON.stringify(logs.slice(0, 500))); // Keep last 500 logs
 }

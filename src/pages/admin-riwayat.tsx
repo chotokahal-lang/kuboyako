@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Search, Filter, ChevronRight } from "lucide-react";
+import { Search, Filter, ChevronRight, Trash2, Download, Edit2, Save, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { getEvidenceData, EvidenceItem } from "@/lib/store";
+import { getEvidenceData, EvidenceItem, deleteEvidenceItem, addLog } from "@/lib/store";
+import { exportToCsv } from "@/lib/export";
 import { PageHeader } from "@/components/layout/page-header";
 import { icons3d } from "@/assets/icons";
 import { LiveText } from "@/components/ui/live-text";
@@ -18,6 +19,7 @@ export default function AdminRiwayat() {
   const [data, setData] = useState<EvidenceItem[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<(typeof filters)[number]["id"]>("semua");
+  const [editingItem, setEditingItem] = useState<EvidenceItem | null>(null);
 
   useEffect(() => {
     setData(getEvidenceData().sort((a, b) => b.createdAt - a.createdAt));
@@ -48,6 +50,60 @@ export default function AdminRiwayat() {
     return nopol.includes(q) || rangka.includes(q) || mesin.includes(q) || merk.includes(q) || lp.includes(q);
   });
 
+  const handleDelete = (id: string, noLp: string) => {
+    if (confirm(`Hapus data barang bukti LP: ${noLp}?`)) {
+      deleteEvidenceItem(id);
+      setData(data.filter(it => it.id !== id));
+      
+      const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
+      addLog(adminNrp, "admin", "DELETE_EVIDENCE", `Menghapus data BB: ${noLp}`);
+    }
+  };
+
+  const handleExport = () => {
+    const dataToExport = filtered.map(it => ({
+      ID: it.id,
+      Tipe: it.type,
+      No_LP: it.noLp,
+      Tgl_LP: it.tglLp,
+      Pelapor: it.pelapor,
+      TKP: it.lokasiTkp,
+      Satker: it.satker,
+      Asal_LP: it.asalLp,
+      ...(it.type === 'hp' 
+        ? { Merk: it.merk, Model: (it as any).model, IMEI: (it as any).imei1 }
+        : { No_Pol: (it as any).noPolisi, Merk: (it as any).merk, No_Mesin: (it as any).noMesin })
+    }));
+    exportToCsv(`Daftar_BB_${new Date().toISOString().split('T')[0]}.csv`, dataToExport);
+  };
+
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingItem) return;
+    
+    const formData = new FormData(e.currentTarget);
+    const updatedItem = {
+      ...editingItem,
+      noLp: formData.get("noLp") as string,
+      pelapor: formData.get("pelapor") as string,
+      lokasiTkp: formData.get("lokasiTkp") as string,
+      asalLp: formData.get("asalLp") as string,
+      merk: formData.get("merk") as string,
+      warna: formData.get("warna") as string,
+      ...(editingItem.type === "hp" 
+        ? { imei1: formData.get("imei1") as string }
+        : { noPolisi: formData.get("noPolisi") as string })
+    } as EvidenceItem;
+
+    updateEvidenceItem(updatedItem);
+    setData(data.map(it => it.id === updatedItem.id ? updatedItem : it));
+    
+    const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
+    addLog(adminNrp, "admin", "UPDATE_EVIDENCE", `Mengubah data BB: ${updatedItem.noLp}`);
+    
+    setEditingItem(null);
+  };
+
   return (
     <div className="flex flex-col min-h-full pb-10">
       <PageHeader
@@ -55,6 +111,14 @@ export default function AdminRiwayat() {
         title="Riwayat Arsip"
         subtitle="Cari dan telusuri seluruh arsip barang bukti."
         back="/admin"
+        right={
+          <button
+            onClick={handleExport}
+            className="w-11 h-11 surface-glass rounded-2xl flex items-center justify-center text-primary"
+          >
+            <Download className="w-5 h-5" />
+          </button>
+        }
       />
 
       {/* Search */}
@@ -129,9 +193,31 @@ export default function AdminRiwayat() {
                         {item.noLp}
                       </p>
                     </div>
-                    <span className="w-9 h-9 rounded-full surface-glass flex items-center justify-center text-foreground/60 group-hover:text-primary transition-colors">
-                      <ChevronRight className="w-4 h-4" />
-                    </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setEditingItem(item);
+                          }}
+                          className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDelete(item.id, item.noLp);
+                          }}
+                          className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                        <span className="w-9 h-9 rounded-full surface-glass flex items-center justify-center text-foreground/60 group-hover:text-primary transition-colors">
+                          <ChevronRight className="w-4 h-4" />
+                        </span>
+                      </div>
                   </div>
                 </Link>
               </motion.div>
@@ -147,6 +233,75 @@ export default function AdminRiwayat() {
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {editingItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-xl flex items-end sm:items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              exit={{ y: 100 }}
+              className="w-full max-w-md surface-elevated rounded-3xl p-6 shadow-2xl relative"
+            >
+              <button
+                onClick={() => setEditingItem(null)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full surface-glass flex items-center justify-center text-muted-foreground"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <h2 className="display-font text-xl text-foreground mb-6">Edit Data Barang Bukti</h2>
+              
+              <form onSubmit={handleUpdate} className="space-y-4 max-h-[70vh] overflow-y-auto px-1 pb-4 scrollbar-hide">
+                <EditField label="Nomor LP" name="noLp" defaultValue={editingItem.noLp} />
+                <EditField label="Pelapor" name="pelapor" defaultValue={editingItem.pelapor} />
+                <EditField label="Lokasi TKP" name="lokasiTkp" defaultValue={editingItem.lokasiTkp} />
+                <EditField label="Asal LP (Kesatuan)" name="asalLp" defaultValue={editingItem.asalLp} />
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <EditField 
+                    label={editingItem.type === "hp" ? "IMEI" : "No. Polisi"} 
+                    name={editingItem.type === "hp" ? "imei1" : "noPolisi"} 
+                    defaultValue={editingItem.type === "hp" ? editingItem.imei1 : (editingItem as any).noPolisi} 
+                  />
+                  <EditField label="Merk" name="merk" defaultValue={editingItem.merk} />
+                </div>
+                
+                <EditField label="Warna" name="warna" defaultValue={editingItem.warna} />
+
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold flex items-center justify-center gap-2"
+                  >
+                    <Save className="w-4 h-4" />
+                    Perbarui Data
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function EditField({ label, name, defaultValue }: { label: string, name: string, defaultValue: string }) {
+  return (
+    <div>
+      <label className="eyebrow ml-1">{label}</label>
+      <input
+        name={name}
+        defaultValue={defaultValue}
+        required
+        className="mt-1.5 w-full h-11 px-4 surface rounded-xl bg-transparent outline-none text-sm font-medium text-foreground focus:ring-2 focus:ring-primary/40 transition-all"
+      />
     </div>
   );
 }

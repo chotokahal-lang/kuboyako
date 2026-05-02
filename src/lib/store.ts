@@ -411,3 +411,47 @@ export function addLog(user: string, role: string, action: string, details: stri
   logs.unshift(newLog); // Newest first
   localStorage.setItem("kuboyako_logs", JSON.stringify(logs.slice(0, 500))); // Keep last 500 logs
 }
+
+// ── LOCATION TRACKING ──────────────────────────────────────────
+
+export interface UserLocation {
+  id: string;
+  timestamp: number;
+  user: string;
+  role: string;
+  lat: number;
+  lng: number;
+  action: string;
+}
+
+export function getUserLocations(): UserLocation[] {
+  const stored = localStorage.getItem("kuboyako_locations");
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error("Failed to parse locations data", e);
+      localStorage.removeItem("kuboyako_locations");
+    }
+  }
+  return [];
+}
+
+export function trackLocation(user: string, role: string, lat: number, lng: number, action: string) {
+  const locations = getUserLocations();
+  const newLoc: UserLocation = {
+    id: Math.random().toString(36).slice(2, 11),
+    timestamp: Date.now(),
+    user,
+    role,
+    lat,
+    lng,
+    action
+  };
+  locations.unshift(newLoc);
+  localStorage.setItem("kuboyako_locations", JSON.stringify(locations.slice(0, 100))); // Keep last 100
+}
+
+export function clearLocations() {
+  localStorage.removeItem("kuboyako_locations");
+}

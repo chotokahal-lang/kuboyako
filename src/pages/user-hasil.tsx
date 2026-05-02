@@ -12,7 +12,7 @@ import {
   Phone,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { searchEvidence, EvidenceItem, addLog } from "@/lib/store";
+import { searchEvidence, EvidenceItem, addLog, trackLocation } from "@/lib/store";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
 import { LiveText } from "@/components/ui/live-text";
@@ -36,6 +36,14 @@ export default function UserHasil() {
       const userNrp = localStorage.getItem("kuboyako_user_nrp") || "guest";
       const userRole = localStorage.getItem("kuboyako_role") || "umum";
       addLog(userNrp, userRole, "SEARCH", `Mencari ${type}: ${decoded} (${found ? "Ditemukan" : "Tidak Ditemukan"})`);
+      
+      // Simulate random location tracking around Makassar
+      const makassarLat = -5.147665;
+      const makassarLng = 119.432731;
+      const randLat = makassarLat + (Math.random() - 0.5) * 0.1;
+      const randLng = makassarLng + (Math.random() - 0.5) * 0.1;
+      trackLocation(userNrp === "guest" ? "Anonim (Masyarakat)" : userNrp, userRole, randLat, randLng, `Pencarian ${type}`);
+
     }, 1600);
     return () => clearTimeout(timer);
   }, [type, query]);

@@ -52,10 +52,11 @@ export default function AdminDashboard() {
   const actions = [
     { title: "Input Manual", desc: "Catat data barang bukti baru", href: "/admin/input", icon: icons3d.form },
     { title: "Scan Foto LP", desc: "Ekstraksi otomatis dari foto LP", href: "/admin/scan", icon: icons3d.scan },
+    { title: "Pelacakan Lokasi", desc: "Radar pantauan posisi anggota & masyarakat", href: "/admin/tracking", icon: icons3d.scan, isEpic: true },
     { title: "Manajemen Akun", desc: "Kelola akun Anggota Polri", href: "/admin/accounts", icon: icons3d.user },
     { title: "Log Aktivitas", desc: "Riwayat penggunaan sistem", href: "/admin/logs", icon: icons3d.archive },
     { title: "Status Penginputan", desc: "Riwayat & arsip data BB", href: "/admin/riwayat", icon: icons3d.archive },
-    { title: "Ulasan Tentang Aplikasi", desc: "Testimoni & kesaksian nyata", href: "/testimoni", icon: icons3d.shield, isEpic: true },
+    { title: "Ulasan Tentang Aplikasi", desc: "Testimoni & kesaksian nyata", href: "/testimoni", icon: icons3d.shield },
   ];
 
   const handleResetSystem = () => {

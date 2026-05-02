@@ -19,6 +19,7 @@ import AdminRiwayat from "@/pages/admin-riwayat";
 import AdminDetail from "@/pages/admin-detail";
 import AdminAccounts from "@/pages/admin-accounts";
 import AdminLogs from "@/pages/admin-logs";
+import AdminTracking from "@/pages/admin-tracking";
 import UserDashboard from "@/pages/user-dashboard";
 import UserCek from "@/pages/user-cek";
 import UserHasil from "@/pages/user-hasil";
@@ -233,6 +234,7 @@ function AppContent() {
                 <Route path="/admin/detail/:id" element={<AdminDetail />} />
                 <Route path="/admin/accounts" element={<AdminAccounts />} />
                 <Route path="/admin/logs" element={<AdminLogs />} />
+                <Route path="/admin/tracking" element={<AdminTracking />} />
 
                 <Route path="/user" element={<UserDashboard />} />
                 <Route path="/user/cek/:type" element={<UserCek />} />

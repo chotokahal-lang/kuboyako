@@ -165,7 +165,7 @@ export default function About() {
           <p className="eyebrow text-muted-foreground/40 text-[9px]">
             <LiveText as="span" id="about-footer" defaultText="KUBOYAKO · RESMOB POLDA SULSEL · 2026 · Hak Cipta Dilindungi" />
           </p>
-        {/* Review Teknologi */}
+        {/* Review Tentang Aplikasi */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -175,7 +175,7 @@ export default function About() {
           <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-primary fill-primary" />
-              <p className="eyebrow text-[10px]">Ulasan Teknologi</p>
+              <p className="eyebrow text-[10px]"><LiveText id="about-rev-title-main" defaultText="Ulasan Tentang Aplikasi" /></p>
             </div>
             <div className="flex gap-0.5">
                {[...Array(5)].map((_, i) => <Star key={i} className="w-2 h-2 fill-primary text-primary" />)}
@@ -183,20 +183,22 @@ export default function About() {
           </div>
           <div className="px-4 py-5 space-y-4">
              <div className="space-y-1">
-                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-title-1" defaultText="Estetika & Desain" /></p>
-                <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                  <LiveText id="about-rev-desc-1" defaultText="KUBOYAKO mendobrak standar aplikasi pemerintahan yang biasanya kaku. Dengan '2030 Cinematic Aesthetic', aplikasi ini memberikan kesan prestisius melalui Glassmorphism dan pencahayaan dinamis yang hidup." />
+                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-tag-1" defaultText="Testimoni Lapangan" /></p>
+                <p className="text-[11px] text-foreground font-bold leading-relaxed italic">
+                  <LiveText id="about-rev-content-1" defaultText="\"Sangat membantu tugas lapangan. Data barang bukti jadi rapi dan gampang dicari. Gak perlu ribet buka buku besar lagi. Efisiensi kerja naik drastis!\"" />
                 </p>
+                <p className="text-[9px] text-muted-foreground">— Anggota Opsnal Resmob</p>
              </div>
              <div className="space-y-1">
-                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-title-2" defaultText="Fitur Unggulan" /></p>
-                <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                  <LiveText id="about-rev-desc-2" defaultText="Sistem Pencarian Real-Time dan Live Edit System (WYSIWYG) adalah mahakarya inovasi. Memungkinkan fleksibilitas luar biasa bagi Admin tanpa menyentuh kode, sebuah lompatan kuantum birokrasi digital." />
+                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-tag-2" defaultText="Kesan Pengguna" /></p>
+                <p className="text-[11px] text-foreground font-bold leading-relaxed italic">
+                  <LiveText id="about-rev-content-2" defaultText="\"Tampilannya gila sih, keren banget! Pak Bos juga senang liatnya pas presentasi. Bangga punya sistem se-canggih ini di Polda Sulsel.\"" />
                 </p>
+                <p className="text-[9px] text-muted-foreground">— Operator Data Ditkrimum</p>
              </div>
              <div className="space-y-1 border-t border-white/5 pt-3">
-                <p className="text-[11px] font-bold text-foreground leading-tight"><LiveText id="about-rev-sum-title" defaultText="Rating: 5/5 — Sempurna & Visioner" /></p>
-                <p className="text-[10px] text-primary/80 font-bold italic"><LiveText id="about-rev-sum-desc" defaultText="\"Standard baru penegakan hukum digital di era industri 4.0.\"" /></p>
+                <p className="text-[11px] font-bold text-foreground leading-tight"><LiveText id="about-rev-sum-title" defaultText="Inovasi Nyata Untuk Polri" /></p>
+                <p className="text-[10px] text-primary font-black italic uppercase tracking-tighter"><LiveText id="about-rev-sum-desc" defaultText="\"Era baru penegakan hukum digital yang praktis dan terpercaya.\"" /></p>
              </div>
           </div>
         </motion.div>

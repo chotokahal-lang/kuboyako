@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, User, Shield, Briefcase, Key, Save, Trash2, X } from "lucide-react";
+import { Plus, User, Shield, Briefcase, Key, Save, Trash2, X, Search, Edit2, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getUserAccounts, saveUserAccount, UserAccount, addLog, deleteUserAccount } from "@/lib/store";
 import { PageHeader } from "@/components/layout/page-header";
@@ -11,6 +11,9 @@ import { useToast } from "@/hooks/use-toast";
 export default function AdminAccounts() {
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const [showAdd, setShowAdd] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [editingAccount, setEditingAccount] = useState<UserAccount | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
@@ -18,7 +21,7 @@ export default function AdminAccounts() {
     name: "",
     unit: "",
     password: "",
-    role: "polri" as const
+    role: "polri" as "admin" | "polri"
   });
 
   useEffect(() => {
@@ -48,20 +51,59 @@ export default function AdminAccounts() {
     setFormData({ nrp: "", name: "", unit: "", password: "", role: "polri" });
   };
 
-  const handleDelete = (id: string, name: string) => {
-    if (confirm(`Hapus akun ${name}?`)) {
-      deleteUserAccount(id);
-      setAccounts(accounts.filter(a => a.id !== id));
-      
-      const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
-      addLog(adminNrp, "admin", "DELETE_ACCOUNT", `Menghapus akun Polri: ${name}`);
-      
-      toast({
-        title: "Akun Dihapus",
-        description: `Akun ${name} telah dihapus dari sistem.`
-      });
-    }
+  const handleDelete = (id: string) => {
+    const accToDelete = accounts.find(a => a.id === id);
+    if (!accToDelete) return;
+
+    deleteUserAccount(id);
+    setAccounts(accounts.filter(a => a.id !== id));
+    setDeletingId(null);
+    
+    const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
+    addLog(adminNrp, "admin", "DELETE_ACCOUNT", `Menghapus akun Polri: ${accToDelete.name}`);
+    
+    toast({
+      title: "Akun Berhasil Dihapus",
+      description: `Data personel ${accToDelete.name} telah dihapus.`,
+    });
   };
+
+  const handleEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingAccount) return;
+
+    const updated = { ...editingAccount, ...formData };
+    // We need a store function for updateAccount, I'll add it to store.ts or just handle it here
+    const allAccounts = getUserAccounts();
+    const index = allAccounts.findIndex(a => a.id === editingAccount.id);
+    if (index !== -1) {
+      allAccounts[index] = updated;
+      localStorage.setItem("kuboyako_accounts", JSON.stringify(allAccounts));
+      setAccounts(allAccounts);
+    }
+
+    setEditingAccount(null);
+    setShowAdd(false);
+    toast({ title: "Akun Diperbarui", description: `Data ${formData.name} telah disimpan.` });
+  };
+
+  const openEdit = (acc: UserAccount) => {
+    setEditingAccount(acc);
+    setFormData({
+      nrp: acc.nrp,
+      name: acc.name,
+      unit: acc.unit,
+      password: acc.password,
+      role: acc.role
+    });
+    setShowAdd(true);
+  };
+
+  const filteredAccounts = accounts.filter(acc => 
+    acc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    acc.nrp.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    acc.unit.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col min-h-full pb-10">
@@ -72,14 +114,24 @@ export default function AdminAccounts() {
         back="/admin"
       />
 
-      <div className="px-6 mb-6">
+      <div className="px-6 mb-4 space-y-4">
         <button
-          onClick={() => setShowAdd(true)}
+          onClick={() => { setEditingAccount(null); setFormData({ nrp: "", name: "", unit: "", password: "", role: "polri" }); setShowAdd(true); }}
           className="w-full h-14 rounded-2xl gradient-primary text-primary-foreground font-bold flex items-center justify-center gap-3 shadow-glow"
         >
           <Plus className="w-5 h-5" />
-          <span>Buat Akun Baru</span>
+          <span>Tambah Personel Baru</span>
         </button>
+
+        <div className="surface rounded-2xl flex items-center px-4 h-12 focus-within:ring-2 focus-within:ring-primary/40 transition-all border border-white/5">
+          <Search className="w-4 h-4 text-muted-foreground" />
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cari nama atau NRP…"
+            className="flex-1 h-12 bg-transparent outline-none px-3 text-sm font-medium text-foreground"
+          />
+        </div>
       </div>
 
       <div className="px-6 space-y-4">
@@ -88,15 +140,15 @@ export default function AdminAccounts() {
           <span className="text-[10px] text-muted-foreground/60">{accounts.length} Akun</span>
         </div>
 
-        {accounts.map((acc, i) => (
+        {filteredAccounts.map((acc, i) => (
           <motion.div
             key={acc.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="surface-elevated rounded-2xl p-4 flex items-center gap-4 border border-white/5"
+            className="surface-elevated rounded-2xl p-4 flex items-center gap-4 border border-white/5 group"
           >
-            <div className="w-12 h-12 rounded-2xl surface-glass flex items-center justify-center text-primary shrink-0">
+            <div className="w-12 h-12 rounded-2xl surface-glass flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform">
               {acc.role === "admin" ? <Shield className="w-6 h-6" /> : <User className="w-6 h-6" />}
             </div>
             <div className="flex-1 min-w-0">
@@ -108,16 +160,32 @@ export default function AdminAccounts() {
               </div>
               <p className="text-xs text-muted-foreground mt-0.5 truncate">{acc.nrp} · {acc.unit}</p>
             </div>
-            {acc.nrp !== "admin" && (
+            
+            <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
-                onClick={() => handleDelete(acc.id, acc.name)}
-                className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+                onClick={() => openEdit(acc)}
+                className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
+                <Edit2 className="w-4 h-4" />
               </button>
-            )}
+              {acc.nrp !== "admin" && (
+                <button
+                  onClick={() => setDeletingId(acc.id)}
+                  className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </motion.div>
         ))}
+
+        {filteredAccounts.length === 0 && (
+          <div className="py-20 text-center">
+            <User className="w-12 h-12 text-muted-foreground/20 mx-auto mb-4" />
+            <p className="eyebrow text-muted-foreground/50">Personel tidak ditemukan</p>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>
@@ -141,24 +209,80 @@ export default function AdminAccounts() {
                 <X className="w-4 h-4" />
               </button>
 
-              <h2 className="display-font text-xl text-foreground mb-6">Tambah Akun Polri</h2>
+              <h2 className="display-font text-xl text-foreground mb-6">
+                {editingAccount ? "Edit Akun Personel" : "Tambah Akun Polri"}
+              </h2>
               
-              <form onSubmit={handleAdd} className="space-y-4">
+              <form onSubmit={editingAccount ? handleEdit : handleAdd} className="space-y-4">
                 <Field icon={<User className="w-4 h-4" />} label="NRP / Username" value={formData.nrp} onChange={v => setFormData({...formData, nrp: v})} placeholder="7104XXXX" />
                 <Field icon={<User className="w-4 h-4" />} label="Nama Lengkap" value={formData.name} onChange={v => setFormData({...formData, name: v})} placeholder="Nama Sesuai KTP/KTA" />
                 <Field icon={<Briefcase className="w-4 h-4" />} label="Kesatuan / Unit" value={formData.unit} onChange={v => setFormData({...formData, unit: v})} placeholder="RESMOB POLDA SULSEL" />
-                <Field icon={<Key className="w-4 h-4" />} label="Password" value={formData.password} onChange={v => setFormData({...formData, password: v})} type="password" placeholder="••••••••" />
+                <Field icon={<Key className="w-4 h-4" />} label="Password" value={formData.password} onChange={v => setFormData({...formData, password: v})} type="text" placeholder="••••••••" />
                 
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({...formData, role: 'polri'})}
+                    className={`flex-1 h-10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border ${formData.role === 'polri' ? 'bg-accent/20 text-accent border-accent/30' : 'surface text-muted-foreground border-white/5'}`}
+                  >
+                    Anggota Polri
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({...formData, role: 'admin'})}
+                    className={`flex-1 h-10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all border ${formData.role === 'admin' ? 'bg-primary/20 text-primary border-primary/30' : 'surface text-muted-foreground border-white/5'}`}
+                  >
+                    Administrator
+                  </button>
+                </div>
+
                 <div className="pt-2">
                   <button
                     type="submit"
                     className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold flex items-center justify-center gap-2"
                   >
                     <Save className="w-4 h-4" />
-                    Simpan Akun
+                    {editingAccount ? "Perbarui Akun" : "Simpan Akun"}
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {deletingId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="w-full max-w-sm surface-elevated rounded-3xl p-6 text-center border border-white/10"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-destructive/10 flex items-center justify-center text-destructive mx-auto mb-4">
+                <Trash2 className="w-8 h-8" />
+              </div>
+              <h3 className="display-font text-lg text-foreground mb-2">Hapus Personel?</h3>
+              <p className="text-xs text-muted-foreground mb-6">
+                Tindakan ini tidak dapat dibatalkan. Seluruh akses untuk akun ini akan segera dicabut.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setDeletingId(null)}
+                  className="flex-1 h-12 rounded-xl surface text-foreground font-bold"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={() => handleDelete(deletingId)}
+                  className="flex-1 h-12 rounded-xl bg-destructive text-white font-bold shadow-lg shadow-destructive/20"
+                >
+                  Ya, Hapus
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}

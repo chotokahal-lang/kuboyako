@@ -85,7 +85,7 @@ export default function UserCek() {
               onChange={(e) => setQuery(e.target.value.toUpperCase())}
               placeholder={details.placeholder}
               required
-              className="w-full h-20 bg-transparent outline-none text-center text-2xl font-bold tracking-[0.18em] text-foreground placeholder:text-muted-foreground/40 placeholder:font-medium placeholder:tracking-wider uppercase"
+              className="w-full h-20 bg-transparent outline-none text-center text-lg xs:text-xl sm:text-2xl font-bold tracking-[0.1em] sm:tracking-[0.18em] text-foreground placeholder:text-muted-foreground/40 placeholder:font-medium placeholder:tracking-wider uppercase px-4"
             />
           </div>
 

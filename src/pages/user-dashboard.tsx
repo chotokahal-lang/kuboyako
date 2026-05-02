@@ -123,7 +123,7 @@ export default function UserDashboard() {
       </div>
 
       {/* Menu grid */}
-      <section className={`px-6 grid gap-4 mb-6 ${isPolri ? "grid-cols-2" : "grid-cols-3"}`}>
+      <section className={`px-6 grid gap-4 mb-6 ${isPolri ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3"}`}>
         {menus.map((m, i) => (
           <motion.div
             key={m.href}

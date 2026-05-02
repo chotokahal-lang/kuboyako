@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Shield, User, Star, ChevronRight, Bell, HelpCircle, Info } from "lucide-react";
+import { LogOut, Shield, User, Star, ChevronRight, Bell, HelpCircle, Info, Scale } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { getUnreadCount } from "./notifications";
 import { LiveText } from "@/components/ui/live-text";
@@ -38,6 +38,8 @@ export default function Profile() {
   const menus = [
     { label: "Notifikasi", icon: <Bell className="w-4 h-4 text-primary" />, to: "/notifications" },
     { label: "Bantuan & FAQ", icon: <HelpCircle className="w-4 h-4 text-accent" />, to: "/help-faq" },
+    { label: "Kebijakan Privasi", icon: <Shield className="w-4 h-4 text-primary" />, to: "/privacy" },
+    { label: "Syarat & Ketentuan", icon: <Scale className="w-4 h-4 text-accent" />, to: "/terms" },
     { label: "Tentang Aplikasi", icon: <Info className="w-4 h-4 text-muted-foreground" />, to: "/about" },
   ];
 

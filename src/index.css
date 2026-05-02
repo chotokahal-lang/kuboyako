@@ -98,12 +98,52 @@
     font-feature-settings: "ss01", "cv11";
     background-image: var(--gradient-mesh), var(--gradient-deep);
     background-attachment: fixed;
-    background-repeat: no-repeat;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
     background-size: cover;
     /* smoother font on Android */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Global Layout Stability & Hardening */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    position: relative;
+    overscroll-behavior-y: none;
+  }
+
+  .surface, .surface-elevated, .surface-glass {
+    overflow: hidden !important;
+    position: relative;
+  }
+
+  /* Force text containment */
+  p, h1, h2, h3, h4, span, label {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .truncate {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  input, textarea, select {
+    max-width: 100% !important;
+    font-size: 16px !important; /* Prevent iOS zoom */
   }
 
   ::selection {
@@ -617,7 +657,62 @@ body.live-edit-focus .live-edit-toggle-wrap {
 .live-toolbar-editor-scroll::-webkit-scrollbar {
   width: 6px;
 }
+/* Presentation Phone Mode Hardening */
+.presentation-phone-mode {
+  font-size: 14px; /* Base scaling for phone mode */
+}
 
+.presentation-phone-mode .presentasi-slide-content {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+  padding-top: 4rem !important;
+  padding-bottom: 2rem !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.presentation-phone-mode h2 {
+  font-size: 1.5rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+}
+
+.presentation-phone-mode p {
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.presentation-phone-mode .surface-elevated {
+  padding: 1.25rem !important;
+  border-radius: 1.5rem !important;
+}
+
+.presentation-phone-mode .display-font {
+  letter-spacing: -0.02em !important;
+}
+
+.presentation-phone-mode .eyebrow {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.2em !important;
+}
+
+.presentation-phone-mode img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Scrollbar hidden but functional */
+.presentation-phone-mode .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.presentation-phone-mode .scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 .live-toolbar-editor-scroll::-webkit-scrollbar-thumb {
   background: hsl(var(--primary) / 0.35);
   border-radius: 9999px;

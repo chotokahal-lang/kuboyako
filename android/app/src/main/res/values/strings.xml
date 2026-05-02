@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">KUBOYAKO</string>
+    <string name="title_activity_main">KUBOYAKO</string>
+    <string name="package_name">com.kuboyako.app</string>
+    <string name="custom_url_scheme">com.kuboyako.app</string>
+</resources>

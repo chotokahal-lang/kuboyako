@@ -127,11 +127,11 @@ export default function AdminInput() {
         <Section sectionId="admin-input-lp" title="Informasi Laporan Polisi" iconSrc={icons3d.form}>
           <FieldGroup>
             <Field label="Nomor Laporan Polisi" name="noLp" required placeholder="LP/123/IV/2026/SPKT…" defaultValue={ocrData?.noLp} />
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Tanggal LP" name="tglLp" type="date" required defaultValue={new Date().toISOString().split("T")[0]} />
               <Field label="Pelapor" name="pelapor" required placeholder="Nama lengkap" defaultValue={ocrData?.pelapor} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Lokasi TKP" name="lokasiTkp" required placeholder="Jl. Pettarani No. 10" />
               <Field label="Asal LP (Kesatuan)" name="asalLp" required placeholder="Polsek Panakkukang" />
             </div>
@@ -147,13 +147,13 @@ export default function AdminInput() {
           <FieldGroup>
             {(tab === "mobil" || tab === "motor") && (
               <>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Field scope={tab} label="Nomor Polisi" name="noPolisi" required placeholder="DD 1234 AB" uppercase defaultValue={ocrData?.noPolisi} />
                   <Field scope={tab} label="Tahun" name="tahun" type="number" required placeholder="2024" defaultValue={ocrData?.tahun} />
                 </div>
                 <Field scope={tab} label="Nomor Rangka" name="noRangka" required placeholder="Cek pada STNK/BPKB" uppercase defaultValue={ocrData?.noRangka} />
                 <Field scope={tab} label="Nomor Mesin" name="noMesin" required placeholder="Cek pada blok mesin" uppercase defaultValue={ocrData?.noMesin} />
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Field scope={tab} label="Merk" name="merk" required placeholder={tab === "mobil" ? "Toyota" : "Honda"} defaultValue={ocrData?.merk} />
                   <Field
                     scope={tab}
@@ -169,7 +169,7 @@ export default function AdminInput() {
 
             {tab === "hp" && (
               <>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Field scope={tab} label="Merk" name="merk" required placeholder="Apple" />
                   <Field scope={tab} label="Model" name="model" required placeholder="iPhone 15 Pro" />
                 </div>

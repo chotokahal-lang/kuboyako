@@ -93,10 +93,10 @@ export default function UserHasil() {
             <ArrowLeft className="w-5 h-5" />
           </span>
         </Link>
-        <div className="text-center">
-          <p className="eyebrow text-muted-foreground"><LiveText as="span" id="hasil-header-label" defaultText="Hasil Verifikasi" /></p>
+        <div className="text-center flex-1 min-w-0 px-2">
+          <p className="eyebrow text-muted-foreground truncate"><LiveText as="span" id="hasil-header-label" defaultText="Hasil Verifikasi" /></p>
           <p
-            className={`text-xs font-bold uppercase tracking-[0.3em] mt-0.5 ${
+            className={`text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-0.5 truncate ${
               isSafe ? "text-emerald-500" : "text-destructive"
             }`}
           >

@@ -1,0 +1,17 @@
+{
+  "name": "KUBOYAKO RESMOB",
+  "short_name": "KUBOYAKO",
+  "description": "Sistem Arsip Barang Bukti RESMOB POLDA SULSEL",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#02050A",
+  "theme_color": "#FF7000",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

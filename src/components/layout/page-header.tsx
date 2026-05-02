@@ -76,7 +76,7 @@ export function PageHeader({
           </p>
         )}
         {title && (
-          <h1 className="display-font text-[2rem] leading-[1.05] text-foreground">
+          <h1 className="display-font text-[1.75rem] sm:text-[2rem] leading-[1.05] text-foreground break-words hyphens-auto">
             {typeof title === "string" ? (
               <LiveText as="span" id={`ph-title-${title.replace(/\s+/g, "")}`} defaultText={title} />
             ) : (

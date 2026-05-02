@@ -336,8 +336,8 @@ export default function Presentasi() {
         // Use the smaller scale to ensure frame fits entirely
         let newScale = Math.min(scaleX, scaleY, 1);
 
-        // Clamp to reasonable bounds
-        newScale = Math.max(0.55, Math.min(newScale, 1));
+        // Clamp to reasonable bounds - allow smaller scale for very small viewports
+        newScale = Math.max(0.3, Math.min(newScale, 1));
 
         setScale(newScale);
       };
@@ -516,8 +516,10 @@ export default function Presentasi() {
   }, [current, narrationOn, soundReady]);
 
   /* ── AutoPlay ────────────────────────────────────── */
+  const isGlobalEditMode = useLiveEditStore(s => s.isEditMode);
+
   useEffect(() => {
-    if (!autoPlay) {
+    if (!autoPlay || isGlobalEditMode) {
       setSlideProgress(0);
       return;
     }
@@ -542,7 +544,7 @@ export default function Presentasi() {
       }
     }, interval);
     return () => clearInterval(timer);
-  }, [autoPlay, current, goNext, narrationOn, soundReady]);
+  }, [autoPlay, current, goNext, narrationOn, soundReady, isGlobalEditMode]);
 
   /* ── HUD Logic ────────────────────────────── */
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -556,7 +558,10 @@ export default function Presentasi() {
 
   /* ── Auto-Narrate on Slide Change ──────────────── */
   useEffect(() => {
-    if (!narrationOn || !soundReady) return;
+    if (!narrationOn || !soundReady || isGlobalEditMode) {
+      if (isGlobalEditMode) speechSynthesis.cancel();
+      return;
+    }
     const text = SLIDE_NARRATIONS[current];
     if (!text) return;
 
@@ -567,7 +572,7 @@ export default function Presentasi() {
       speakNarration(text, () => {
         setIsSpeaking(false);
         isFinished = true;
-        if (autoPlayRef.current) {
+        if (autoPlayRef.current && !isGlobalEditMode) {
           // Jeda sebentar setelah bicara selesai sebelum lanjut ke slide berikutnya
           setTimeout(() => {
             goNext();
@@ -583,7 +588,7 @@ export default function Presentasi() {
         setIsSpeaking(false);
       }
     };
-  }, [current, narrationOn, soundReady, goNext]);
+  }, [current, narrationOn, soundReady, goNext, isGlobalEditMode]);
 
   // Preload voices
   useEffect(() => {
@@ -691,29 +696,26 @@ export default function Presentasi() {
           animate={{ scale: 1, opacity: 1 }}
           className={`relative bg-background transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col overflow-hidden ${isTheaterMode
               ? "w-full h-full rounded-none shadow-[0_0_120px_rgba(0,0,0,0.9)]"
-              : "w-full h-full md:w-[390px] md:h-[844px] rounded-none md:rounded-[3rem] md:border-[14px] md:border-[hsl(24_30%_8%)] md:shadow-[0_60px_140px_-30px_hsl(20_100%_4%/0.9),0_0_0_1px_hsl(30_20%_96%/0.07),inset_0_0_20px_rgba(255,255,255,0.05)]"
+              : "presentation-phone-mode w-[390px] h-[844px] max-w-[100vw] max-h-[100vh] rounded-[3rem] border-[14px] border-[hsl(24_30%_8%)] shadow-[0_60px_140px_-30px_hsl(20_100%_4%/0.9),0_0_0_1px_hsl(30_20%_96%/0.07),inset_0_0_20px_rgba(255,255,255,0.05)]"
             }`}
         >
           {!isTheaterMode && (
             <>
               {/* Status Bar - iPhone Style */}
-              <div className="hidden md:flex absolute top-0 left-0 right-0 h-12 items-center justify-between px-7 z-[60] text-[11px] font-semibold text-white/90 pointer-events-none">
+              <div className="absolute top-0 left-0 right-0 h-12 items-center justify-between px-7 z-[60] text-[11px] font-semibold text-white/90 pointer-events-none">
                 <span className="tracking-wide">
                   <LiveText as="span" id="pres-frame-clock" defaultText="9:41" />
                 </span>
                 <div className="flex items-center gap-1">
-                  {/* Signal Bars */}
                   <div className="flex gap-[2px] items-end h-3">
                     <div className="w-[3px] h-[4px] bg-white/50 rounded-[1px]" />
                     <div className="w-[3px] h-[6px] bg-white/70 rounded-[1px]" />
                     <div className="w-[3px] h-[8px] bg-white rounded-[1px]" />
                     <div className="w-[3px] h-[10px] bg-white rounded-[1px]" />
                   </div>
-                  {/* 5G */}
                   <span className="ml-1 text-[10px]">
                     <LiveText as="span" id="pres-frame-network" defaultText="5G" />
                   </span>
-                  {/* Battery */}
                   <div className="w-6 h-[11px] border border-white/50 rounded-[3px] relative ml-1 flex items-center px-[2px]">
                     <div className="h-[7px] bg-white rounded-[1px] w-[75%]" />
                     <div className="absolute -right-[3px] w-[2px] h-[4px] bg-white/60 rounded-r-[1px]" />
@@ -721,28 +723,25 @@ export default function Presentasi() {
                 </div>
               </div>
 
-              {/* Dynamic Island - More Realistic */}
-              <div className="hidden md:flex absolute top-[12px] left-1/2 -translate-x-1/2 w-[85px] h-[26px] bg-black rounded-full z-[60] items-center justify-center overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_4px_20px_rgba(0,0,0,0.5)]">
-                {/* Camera lens */}
+              {/* Dynamic Island */}
+              <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[85px] h-[26px] bg-black rounded-full z-[60] items-center justify-center overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_4px_20px_rgba(0,0,0,0.5)]">
                 <div className="w-[9px] h-[9px] rounded-full bg-[#1a1a1a] ml-auto mr-3 relative">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#2a2a2a] to-[#0a0a0a]" />
                   <div className="absolute top-[2px] left-[2px] w-[3px] h-[3px] rounded-full bg-[#1a3a5c]/60" />
                 </div>
               </div>
 
-              {/* Physical Buttons Mock - Left Side */}
-              <div className="hidden md:block absolute top-[100px] -left-[15px] w-[3px] h-[26px] bg-[hsl(24_25%_12%)] rounded-r-[2px] z-[60] shadow-[inset_-1px_0_2px_rgba(255,255,255,0.1)]" />
-              <div className="hidden md:block absolute top-[140px] -left-[15px] w-[3px] h-[45px] bg-[hsl(24_25%_12%)] rounded-r-[2px] z-[60] shadow-[inset_-1px_0_2px_rgba(255,255,255,0.1)]" />
-              <div className="hidden md:block absolute top-[200px] -left-[15px] w-[3px] h-[45px] bg-[hsl(24_25%_12%)] rounded-r-[2px] z-[60] shadow-[inset_-1px_0_2px_rgba(255,255,255,0.1)]" />
+              {/* Physical Buttons */}
+              <div className="absolute top-[100px] -left-[15px] w-[3px] h-[26px] bg-[hsl(24_25%_12%)] rounded-r-[2px] z-[60]" />
+              <div className="absolute top-[140px] -left-[15px] w-[3px] h-[45px] bg-[hsl(24_25%_12%)] rounded-r-[2px] z-[60]" />
+              <div className="absolute top-[200px] -left-[15px] w-[3px] h-[45px] bg-[hsl(24_25%_12%)] rounded-r-[2px] z-[60]" />
+              <div className="absolute top-[130px] -right-[15px] w-[3px] h-[65px] bg-[hsl(24_25%_12%)] rounded-l-[2px] z-[60]" />
 
-              {/* Physical Buttons Mock - Right Side */}
-              <div className="hidden md:block absolute top-[130px] -right-[15px] w-[3px] h-[65px] bg-[hsl(24_25%_12%)] rounded-l-[2px] z-[60] shadow-[inset_1px_0_2px_rgba(255,255,255,0.1)]" />
+              {/* Home Bar */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[120px] h-[4px] bg-white/30 rounded-full z-[60]" />
 
-              {/* Home Bar (iOS style) */}
-              <div className="hidden md:block absolute bottom-3 left-1/2 -translate-x-1/2 w-[120px] h-[4px] bg-white/30 rounded-full z-[60]" />
-
-              {/* Screen Reflection Effect */}
-              <div className="hidden md:block absolute inset-0 z-[55] pointer-events-none overflow-hidden rounded-[2.4rem]">
+              {/* Screen Reflection */}
+              <div className="absolute inset-0 z-[55] pointer-events-none overflow-hidden rounded-[2.4rem]">
                 <div className="absolute -top-[100%] -left-[50%] w-[200%] h-[100%] bg-gradient-to-br from-white/[0.03] via-transparent to-transparent rotate-12" />
               </div>
             </>

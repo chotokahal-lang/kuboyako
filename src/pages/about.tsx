@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Shield, BookOpen, Star, Building2, Layers, Rocket } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Logo3DImg } from "@/components/ui/logo-3d-img";
@@ -155,13 +155,22 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* Footer */}
+        {/* Footer with Legal Links */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-center py-2"
+          className="text-center py-6 space-y-4"
         >
+          <div className="flex items-center justify-center gap-6">
+            <Link to="/privacy" className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">
+              Kebijakan Privasi
+            </Link>
+            <div className="w-1 h-1 rounded-full bg-white/10" />
+            <Link to="/terms" className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">
+              Syarat & Ketentuan
+            </Link>
+          </div>
           <p className="eyebrow text-muted-foreground/40 text-[9px]">
             <LiveText as="span" id="about-footer" defaultText="KUBOYAKO · RESMOB POLDA SULSEL · 2026 · Hak Cipta Dilindungi" />
           </p>

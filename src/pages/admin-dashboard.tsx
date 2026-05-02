@@ -249,7 +249,7 @@ export default function AdminDashboard() {
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{it.noLp.split('/')[0]}/{it.noLp.split('/')[1]}</p>
+                <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest truncate">{it.noLp}</p>
                 <h4 className="text-sm font-bold text-foreground truncate">{it.merk} {(it as any).noPolisi || (it as any).imei1}</h4>
                 <p className="text-[10px] text-muted-foreground truncate italic">"{it.statusNote || "Berhasil dikembalikan."}"</p>
               </div>
@@ -266,16 +266,16 @@ export default function AdminDashboard() {
       {/* Status footer */}
       <div className="mt-auto px-6 pt-8">
         <div className="surface rounded-2xl p-4 flex items-center gap-3">
-          <span className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/20 flex items-center justify-center">
+          <span className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0">
             <ShieldCheck className="w-5 h-5 text-primary" />
           </span>
-          <div className="min-w-0">
-            <p className="eyebrow text-primary/80"><LiveText as="span" id="admin-status" defaultText="Sistem Aktif" /></p>
+          <div className="min-w-0 flex-1">
+            <p className="eyebrow text-primary/80 truncate"><LiveText as="span" id="admin-status" defaultText="Sistem Aktif" /></p>
             <p className="text-xs text-foreground mt-0.5 truncate">
               <LiveText as="span" id="admin-conn" defaultText="Terhubung · Mainframe RPS" />
             </p>
           </div>
-          <span className="ml-auto w-2 h-2 rounded-full bg-primary animate-pulse" />
+          <span className="shrink-0 w-2 h-2 rounded-full bg-primary animate-pulse" />
         </div>
       </div>
     </div>

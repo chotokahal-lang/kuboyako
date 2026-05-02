@@ -197,7 +197,7 @@ export default function AdminRiwayat() {
                       className="w-14 h-14 object-contain shrink-0 drop-shadow-[0_8px_14px_rgba(0,0,0,0.5)]"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
+                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
                         <h3 className="font-bold text-foreground text-base tracking-tight uppercase truncate group-hover:text-primary transition-colors">
                           {primary}
                         </h3>
@@ -211,7 +211,7 @@ export default function AdminRiwayat() {
                       </div>
                       <p className="text-[11px] text-muted-foreground truncate">{sub}</p>
                       <div className="flex items-center gap-2 mt-2">
-                        <div className="px-2 py-0.5 rounded-md surface-glass border border-white/5 text-[9px] font-bold text-muted-foreground uppercase truncate max-w-[120px]">
+                        <div className="px-2 py-0.5 rounded-md surface-glass border border-white/5 text-[9px] font-bold text-muted-foreground uppercase truncate max-w-[100px]">
                           {item.asalLp || "Resmob Polda"}
                         </div>
                         <p className="text-[9px] text-muted-foreground/60 font-mono">
@@ -222,16 +222,16 @@ export default function AdminRiwayat() {
                         <p className="text-[9px] text-muted-foreground/80 mt-1 italic truncate">{item.statusNote}</p>
                       )}
                     </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 shrink-0 ml-auto">
                         <button
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             setEditingItem(item);
                           }}
-                          className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+                          className="w-8 h-8 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
                         >
-                          <Edit2 className="w-4 h-4" />
+                          <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={(e) => {
@@ -239,12 +239,12 @@ export default function AdminRiwayat() {
                             e.stopPropagation();
                             setDeletingItem({ id: item.id, noLp: item.noLp });
                           }}
-                          className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+                          className="w-8 h-8 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
-                        <span className="w-9 h-9 rounded-full surface-glass flex items-center justify-center text-foreground/60 group-hover:text-primary transition-colors">
-                          <ChevronRight className="w-4 h-4" />
+                        <span className="w-8 h-8 rounded-full surface-glass flex items-center justify-center text-foreground/60 group-hover:text-primary transition-colors hidden xs:flex">
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
                   </div>

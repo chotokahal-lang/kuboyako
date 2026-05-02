@@ -251,6 +251,7 @@ export default function AdminTracking() {
               className="absolute inset-0 w-full h-full pointer-events-none opacity-60 mix-blend-screen transition-opacity duration-1000"
               style={{ filter: 'invert(1) hue-rotate(160deg) saturate(3) brightness(0.9) contrast(1.5)' }}
               title="Makassar Tactical Map"
+              loading="lazy"
             />
 
             {/* Location Markers */}

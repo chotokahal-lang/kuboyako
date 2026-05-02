@@ -38,21 +38,35 @@ const TestimoniPage = lazy(() => import("@/pages/testimoni"));
 const AgentManager = lazy(() => import("@/pages/agent-manager"));
 const AgentAutoFixPage = lazy(() => import("@/pages/agent-autofix"));
 const FileManager = lazy(() => import("@/pages/file-manager"));
+const PrivacyPolicy = lazy(() => import("@/pages/privacy"));
+const TermsConditions = lazy(() => import("@/pages/terms"));
 
 import { LiveEditToggle } from "@/components/ui/live-edit-toggle";
 import { LiveToolbar } from "@/components/ui/live-toolbar";
+import { LiveText } from "@/components/ui/live-text";
 import openingVideo from "@/assets/video.mp4";
 
 const queryClient = new QueryClient();
 
 // High-performance loading fallback
 const LoadingFallback = () => (
-  <div className="flex flex-col items-center justify-center min-h-screen bg-background text-primary">
+  <div className="flex flex-col items-center justify-center min-h-screen bg-[#02050A] text-primary overflow-hidden relative">
+    <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent opacity-50" />
     <div className="relative">
-      <div className="absolute inset-0 bg-primary/20 blur-3xl animate-pulse rounded-full" />
-      <Loader2 className="w-12 h-12 animate-spin relative z-10" />
+      <div className="absolute inset-0 bg-primary/20 blur-[100px] animate-pulse rounded-full" />
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+        className="relative z-10"
+      >
+        <Loader2 className="w-16 h-16 text-primary" />
+      </motion.div>
     </div>
-    <p className="mt-4 eyebrow animate-pulse tracking-[0.3em]">OPTIMIZING SYSTEM...</p>
+    <div className="mt-8 flex flex-col items-center gap-2 relative z-10">
+      <p className="eyebrow animate-pulse tracking-[0.4em] text-primary/80">OPTIMIZING KUBOYAKO</p>
+      <div className="w-32 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest">Sistem Sedang Dipersiapkan...</p>
+    </div>
   </div>
 );
 
@@ -79,13 +93,21 @@ function OpeningVideo({ onComplete }: { onComplete: () => void }) {
     video.addEventListener("timeupdate", updateProgress);
     video.addEventListener("ended", handleEnded);
 
-    // Auto-play
+    // Auto-play failsafe
+    const playTimeout = setTimeout(() => {
+      if (video.paused) {
+        console.warn("Video failed to play in time, skipping...");
+        handleSkip();
+      }
+    }, 4500);
+
     video.play().catch(() => {
       // If autoplay fails, skip video
       handleSkip();
     });
 
     return () => {
+      clearTimeout(playTimeout);
       video.removeEventListener("timeupdate", updateProgress);
       video.removeEventListener("ended", handleEnded);
     };
@@ -262,6 +284,8 @@ function AppContent() {
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/help-faq" element={<HelpFaq />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
+                    <Route path="/terms" element={<TermsConditions />} />
 
                     <Route path="*" element={<NotFound />} />
                   </Routes>

@@ -6,7 +6,10 @@ export function MobileFrame({ children }: { children: ReactNode }) {
   return (
     <div
       className="w-full flex items-center justify-center sm:p-6 md:p-10 font-sans relative overflow-hidden"
-      style={{ minHeight: "100svh" }}
+      style={{ 
+        minHeight: "100vh",
+        height: "100svh" 
+      }}
     >
       {/* Ambient background glows (desktop only) */}
       <div className="hidden sm:block absolute top-[-15%] left-[-10%] w-[55%] h-[55%] rounded-full bg-primary/18 blur-[160px] pointer-events-none" />
@@ -21,8 +24,8 @@ export function MobileFrame({ children }: { children: ReactNode }) {
                    sm:shadow-[0_60px_140px_-30px_hsl(20_100%_4%/0.9),0_0_0_1px_hsl(30_20%_96%/0.07)]"
         style={{
           /* Full viewport on mobile with safe-area, fixed phone height on desktop */
-          height: "100svh",
-          maxHeight: "calc(100svh - 0px)",
+          height: "100vh",
+          maxHeight: "100svh",
         }}
       >
         {/* Safe-area overlay for notch / dynamic island / status bar */}

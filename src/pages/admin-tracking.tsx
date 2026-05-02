@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Map, ArrowLeft, RefreshCw, Crosshair, Users, MapPin, Activity, Play, Square } from "lucide-react";
+import { Map, ArrowLeft, RefreshCw, Crosshair, Users, MapPin, Activity, Play, Square, Lock, Unlock, ShieldAlert } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getUserLocations, UserLocation, trackLocation } from "@/lib/store";
 import { PageHeader } from "@/components/layout/page-header";
@@ -15,6 +15,23 @@ export default function AdminTracking() {
   const [locations, setLocations] = useState<UserLocation[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserLocation | null>(null);
   const [simulationActive, setSimulationActive] = useState(true);
+  
+  // Security Overlay State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pin, setPin] = useState("");
+  const [pinError, setPinError] = useState(false);
+
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pin === "999999") {
+      setIsAuthenticated(true);
+      setPinError(false);
+    } else {
+      setPinError(true);
+      setPin("");
+      setTimeout(() => setPinError(false), 2000);
+    }
+  };
 
   const fetchLocations = () => {
     setLocations(getUserLocations());
@@ -102,7 +119,70 @@ export default function AdminTracking() {
   };
 
   return (
-    <div className="flex flex-col min-h-full pb-10 bg-[#02050A] text-white">
+    <div className="flex flex-col min-h-full pb-10 bg-[#02050A] text-white overflow-hidden relative">
+      
+      {/* Security PIN Overlay */}
+      <AnimatePresence>
+        {!isAuthenticated && (
+          <motion.div 
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
+            exit={{ opacity: 0, scale: 1.1, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-[#02050A]/80 p-6"
+          >
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="surface-glass p-8 rounded-[2.5rem] border border-emerald-500/30 w-full max-w-sm text-center shadow-[0_0_100px_rgba(16,185,129,0.15)] relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50" />
+              
+              <div className="w-20 h-20 mx-auto bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 relative">
+                <div className="absolute inset-0 border border-emerald-500/30 rounded-full animate-[spin_4s_linear_infinite]" />
+                {pinError ? <ShieldAlert className="w-10 h-10 text-red-500" /> : <Lock className="w-10 h-10 text-emerald-400" />}
+              </div>
+              
+              <h2 className="text-xl font-bold uppercase tracking-widest mb-2 text-white">OTORISASI RADAR</h2>
+              <p className="text-emerald-400/70 text-xs tracking-wider mb-8 uppercase font-mono">Masukan Kode Akses 6 Digit</p>
+
+              <form onSubmit={handlePinSubmit} className="space-y-6">
+                <div className="relative">
+                  <input 
+                    type="password" 
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="• • • • • •"
+                    className={`w-full bg-[#02050A]/50 border ${pinError ? 'border-red-500/50 text-red-500 focus:border-red-500' : 'border-emerald-500/30 text-emerald-400 focus:border-emerald-500'} rounded-2xl px-6 py-4 text-center text-2xl font-mono tracking-[1em] outline-none transition-colors placeholder:text-white/20`}
+                    autoFocus
+                  />
+                  {pinError && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute -bottom-6 left-0 right-0 text-red-500 text-xs font-mono"
+                    >
+                      AKSES DITOLAK
+                    </motion.p>
+                  )}
+                </div>
+                
+                <button 
+                  type="submit"
+                  disabled={pin.length < 6}
+                  className="w-full bg-emerald-500 text-[#02050A] font-bold py-4 rounded-2xl uppercase tracking-widest text-sm hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 flex items-center justify-center gap-2"
+                >
+                  <Unlock className="w-4 h-4" /> Buka Enkripsi
+                </button>
+                <Link to="/admin" className="block text-white/30 hover:text-white/60 text-xs uppercase tracking-widest mt-6 transition-colors">
+                  Batalkan
+                </Link>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(16,185,129,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />

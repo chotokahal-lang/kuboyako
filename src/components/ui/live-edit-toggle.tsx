@@ -1,11 +1,45 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Edit3, CheckCircle2, Wand2 } from "lucide-react";
+import { Edit3, CheckCircle2, Wand2, Lock } from "lucide-react";
 import { useLiveEditStore } from "@/store/useLiveEditStore";
+import { useToast } from "@/hooks/use-toast";
 import { LiveText } from "@/components/ui/live-text";
 
 export function LiveEditToggle() {
-  const { isEditMode, toggleEditMode } = useLiveEditStore();
+  const { isEditMode, setEditMode } = useLiveEditStore();
+  const { toast } = useToast();
+  
+  const handleToggle = () => {
+    if (isEditMode) {
+      setEditMode(false);
+      return;
+    }
+
+    const role = localStorage.getItem("kuboyako_role");
+    if (role !== "admin") {
+      toast({
+        variant: "destructive",
+        title: "Akses Dibatasi",
+        description: "Hanya Administrator yang dapat mengaktifkan Live Edit.",
+      });
+      return;
+    }
+
+    const pass = prompt("Masukkan Password Live Edit:");
+    if (pass === "8686resmob") {
+      setEditMode(true);
+      toast({
+        title: "Live Edit Aktif",
+        description: "Anda sekarang dapat mengubah teks secara langsung.",
+      });
+    } else if (pass !== null) {
+      toast({
+        variant: "destructive",
+        title: "Password Salah",
+        description: "Kode otorisasi tidak valid.",
+      });
+    }
+  };
 
   return (
     <motion.div
@@ -38,7 +72,7 @@ export function LiveEditToggle() {
       </AnimatePresence>
 
       <button
-        onClick={toggleEditMode}
+        onClick={handleToggle}
         className={`live-toolbar-btn w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 pointer-events-auto shadow-2xl ${
           isEditMode
             ? "bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.5)] ring-4 ring-primary/20"

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, Filter, ChevronRight, Trash2, Download, Edit2, Save, X } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getEvidenceData, EvidenceItem, deleteEvidenceItem, updateEvidenceItem, addLog } from "@/lib/store";
 import { exportToCsv } from "@/lib/export";
 import { PageHeader } from "@/components/layout/page-header";

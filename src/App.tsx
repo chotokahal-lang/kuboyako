@@ -31,6 +31,7 @@ import HelpFaq from "@/pages/help-faq";
 import About from "@/pages/about";
 import NotFound from "@/pages/not-found";
 import Presentasi from "@/pages/presentasi";
+import TestimoniPage from "@/pages/testimoni";
 import AgentManager from "@/pages/agent-manager";
 import AgentAutoFixPage from "@/pages/agent-autofix";
 import FileManager from "@/pages/file-manager";
@@ -210,6 +211,7 @@ function AppContent() {
       <Routes>
         {/* Full-screen pages (Bypass MobileFrame) */}
         <Route path="/presentasi" element={<Presentasi />} />
+        <Route path="/testimoni" element={<TestimoniPage />} />
         <Route path="/agent-manager" element={<AgentManager />} />
         <Route path="/agent-autofix" element={<AgentAutoFixPage />} />
         <Route path="/file-manager" element={<FileManager />} />

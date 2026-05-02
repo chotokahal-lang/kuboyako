@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Shield, BookOpen, Star, Building2, Layers } from "lucide-react";
+import { Shield, BookOpen, Star, Building2, Layers, Rocket } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Logo3DImg } from "@/components/ui/logo-3d-img";
 import { LiveText } from "@/components/ui/live-text";
@@ -32,6 +32,26 @@ export default function About() {
         subtitle={<LiveText as="span" id="about-subtitle" defaultText="" />}
         back="/profile"
       />
+
+      <div className="px-6 mb-6">
+        <button 
+          onClick={() => navigate("/testimoni")}
+          className="w-full surface-elevated rounded-2xl p-4 flex items-center justify-between group border border-primary/20 bg-gradient-to-r from-primary/5 to-transparent shadow-glow"
+        >
+          <div className="flex items-center gap-3">
+             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg group-hover:scale-110 transition-transform">
+                <Rocket className="w-5 h-5" />
+             </div>
+             <div className="text-left">
+                <p className="eyebrow text-primary text-[10px] leading-none mb-1">Masa Depan</p>
+                <p className="text-sm font-bold text-foreground">Suara Pemimpin Bangsa</p>
+             </div>
+          </div>
+          <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+             <Star className="w-4 h-4 text-primary" />
+          </div>
+        </button>
+      </div>
 
       <div className="px-6 space-y-5">
         {/* Logo & branding */}

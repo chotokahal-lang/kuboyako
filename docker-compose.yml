@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  kuboyako-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kuboyako-app
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+
+# Usage:
+# docker-compose up --build    # Build and run
+# docker-compose up -d         # Run in background
+# docker-compose down          # Stop and remove

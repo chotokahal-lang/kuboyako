@@ -30,18 +30,20 @@ export default function AdminTracking() {
     return () => clearInterval(interval);
   }, []);
 
-  // Convert lat/lng to percentage positions on the simulated map
+  // Convert lat/lng to percentage positions matching the OSM bounding box
   const getPosition = (lat: number, lng: number) => {
-    // Zoom factor
-    const zoom = 10;
-    // Calculate percentage (0-100) based on distance from center
-    const x = 50 + ((lng - CENTER_LNG) * zoom * 50);
-    const y = 50 - ((lat - CENTER_LAT) * zoom * 50); // Invert Y because lat goes down
+    // OSM Bounding Box for Makassar
+    const minLng = 119.35;
+    const maxLng = 119.50;
+    const minLat = -5.20;
+    const maxLat = -5.10;
     
-    // Clamp to 5-95% to keep inside view
+    const x = ((lng - minLng) / (maxLng - minLng)) * 100;
+    const y = ((maxLat - lat) / (maxLat - minLat)) * 100; // Invert because web Y goes down
+    
     return {
-      left: `${Math.max(5, Math.min(95, x))}%`,
-      top: `${Math.max(5, Math.min(95, y))}%`
+      left: `${Math.max(2, Math.min(98, x))}%`,
+      top: `${Math.max(2, Math.min(98, y))}%`
     };
   };
 
@@ -95,16 +97,24 @@ export default function AdminTracking() {
 
         {/* Map Container */}
         <div className="relative w-full aspect-square rounded-[2.5rem] surface-glass border border-white/10 overflow-hidden bg-[#0A0F14] shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+          {/* Real Map Background of Makassar */}
+          <iframe 
+            src="https://www.openstreetmap.org/export/embed.html?bbox=119.35,-5.20,119.50,-5.10&layer=mapnik" 
+            className="absolute inset-0 w-full h-full pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-1000"
+            style={{ filter: 'invert(1) hue-rotate(180deg) saturate(2) brightness(0.8) contrast(1.2)' }}
+            title="Makassar Tactical Map"
+          />
+
           {/* Scanning Radar Animation */}
-          <div className="absolute inset-0 border-2 border-emerald-500/10 rounded-[2.5rem]" />
-          <div className="absolute left-1/2 top-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2" style={{ background: 'conic-gradient(from 0deg, transparent 70%, rgba(16,185,129,0.1) 100%)', animation: 'spin 4s linear infinite' }} />
+          <div className="absolute inset-0 border-2 border-emerald-500/20 rounded-[2.5rem] mix-blend-screen" />
+          <div className="absolute left-1/2 top-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2" style={{ background: 'conic-gradient(from 0deg, transparent 60%, rgba(16,185,129,0.15) 100%)', animation: 'spin 4s linear infinite' }} />
           <div className="absolute left-1/2 top-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 border border-emerald-500/20 rounded-full" />
           <div className="absolute left-1/2 top-1/2 w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 border border-emerald-500/20 rounded-full" />
           
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-emerald-500/20" />
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-emerald-500/20" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-emerald-500/30" />
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-emerald-500/30" />
 
-          {/* Crosshair Center (Makassar) */}
+          {/* Crosshair Center */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-500/50">
             <Crosshair className="w-6 h-6 animate-pulse" />
           </div>

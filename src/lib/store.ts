@@ -424,6 +424,45 @@ export interface UserLocation {
   action: string;
 }
 
+const initialLocations: UserLocation[] = [
+  {
+    id: "loc-1",
+    timestamp: Date.now() - 1000 * 60 * 2,
+    user: "Bripka Andi",
+    role: "polri",
+    lat: -5.147665,
+    lng: 119.432731,
+    action: "Pencarian Mobil (DD 1234 AB)"
+  },
+  {
+    id: "loc-2",
+    timestamp: Date.now() - 1000 * 60 * 15,
+    user: "Anonim (Masyarakat)",
+    role: "umum",
+    lat: -5.130000,
+    lng: 119.410000,
+    action: "Pencarian HP (IMEI: 358...)"
+  },
+  {
+    id: "loc-3",
+    timestamp: Date.now() - 1000 * 60 * 35,
+    user: "Aipda Rahmat",
+    role: "polri",
+    lat: -5.160000,
+    lng: 119.450000,
+    action: "Verifikasi Unit Motor"
+  },
+  {
+    id: "loc-4",
+    timestamp: Date.now() - 1000 * 60 * 60,
+    user: "Anonim (Konter HP)",
+    role: "umum",
+    lat: -5.155000,
+    lng: 119.425000,
+    action: "Pencarian HP Tersuspect"
+  }
+];
+
 export function getUserLocations(): UserLocation[] {
   const stored = localStorage.getItem("kuboyako_locations");
   if (stored) {
@@ -434,7 +473,7 @@ export function getUserLocations(): UserLocation[] {
       localStorage.removeItem("kuboyako_locations");
     }
   }
-  return [];
+  return initialLocations;
 }
 
 export function trackLocation(user: string, role: string, lat: number, lng: number, action: string) {

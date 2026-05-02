@@ -1,5 +1,6 @@
 export type ItemType = 'mobil' | 'motor' | 'hp';
 export type SearchType = ItemType | 'admin-lp';
+export type CaseStatus = 'baru' | 'proses' | 'selesai';
 
 export interface BaseItem {
   id: string;
@@ -11,6 +12,8 @@ export interface BaseItem {
   satker: string;
   asalLp: string;
   foto?: string;
+  status: CaseStatus;
+  statusNote?: string;
   createdAt: number;
 }
 
@@ -73,6 +76,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. AP Pettarani",
     satker: "POLRESTABES MAKASSAR",
     asalLp: "Polsek Panakkukang",
+    status: "selesai",
+    statusNote: "Kendaraan berhasil ditemukan di Kab. Gowa dan dikembalikan ke pelapor pada 25 April 2026.",
     createdAt: Date.now() - 100000,
   },
   {
@@ -91,6 +96,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Urip Sumoharjo",
     satker: "RESMOB POLDA SULSEL",
     asalLp: "Polres Bone",
+    status: "proses",
+    statusNote: "Penyidikan masih berjalan. Motor terdeteksi di wilayah Kab. Wajo, koordinasi dengan Polres setempat.",
     createdAt: Date.now() - 50000,
   },
   {
@@ -109,6 +116,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Poros Maros",
     satker: "POLRES MAROS",
     asalLp: "Polsek Turikale",
+    status: "selesai",
+    statusNote: "Kendaraan diamankan dalam Operasi Jaring Mantop Maret 2026. Tersangka sudah ditahan.",
     createdAt: Date.now() - 120000,
   },
   {
@@ -127,6 +136,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Poros Takalar",
     satker: "POLRES TAKALAR",
     asalLp: "Polsek Pattallassang",
+    status: "proses",
+    statusNote: "Sedang dalam proses penyelidikan. Data STNK sudah dicocokkan dengan database SAMSAT.",
     createdAt: Date.now() - 80000,
   },
   {
@@ -145,6 +156,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Boulevard",
     satker: "POLRESTABES MAKASSAR",
     asalLp: "Polsek Rappocini",
+    status: "baru",
+    statusNote: "Laporan baru diterima, menunggu jadwal penyelidikan.",
     createdAt: Date.now() - 60000,
   },
   {
@@ -160,6 +173,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Sultan Hasanuddin",
     satker: "POLRES GOWA",
     asalLp: "Polsek Somba Opu",
+    status: "selesai",
+    statusNote: "HP berhasil ditemukan pada penadah di Pasar Sentral. Tersangka diamankan 20 Juni 2026.",
     createdAt: Date.now() - 10000,
   },
   {
@@ -175,6 +190,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. AP Pettarani",
     satker: "POLRESTABES MAKASSAR",
     asalLp: "Polsek Tamalanrea",
+    status: "proses",
+    statusNote: "IMEI terdeteksi aktif di jaringan seluler. Koordinasi dengan provider sedang berjalan.",
     createdAt: Date.now() - 90000,
   },
   {
@@ -190,6 +207,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Urip Sumoharjo",
     satker: "RESMOB POLDA SULSEL",
     asalLp: "Polres Sidrap",
+    status: "baru",
+    statusNote: "Data IMEI sudah diinput ke sistem. Menunggu proses penyelidikan lanjutan.",
     createdAt: Date.now() - 40000,
   },
   {
@@ -205,6 +224,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Poros Maros",
     satker: "POLRES MAROS",
     asalLp: "Polsek Lau",
+    status: "selesai",
+    statusNote: "HP ditemukan saat razia di Kab. Maros. Sudah dikembalikan ke pelapor 20 Februari 2026.",
     createdAt: Date.now() - 110000,
   },
   {
@@ -220,6 +241,8 @@ const initialData: EvidenceItem[] = [
     lokasiTkp: "Jl. Poros Takalar",
     satker: "POLRES TAKALAR",
     asalLp: "Polsek Galesong Utara",
+    status: "proses",
+    statusNote: "Dalam tahap koordinasi antar unit untuk pelacakan perangkat.",
     createdAt: Date.now() - 70000,
   }
 ];
@@ -257,6 +280,16 @@ export function deleteEvidenceItem(id: string) {
   const data = getEvidenceData();
   const filtered = data.filter(i => i.id !== id);
   localStorage.setItem("kuboyako_evidence", JSON.stringify(filtered));
+}
+
+export function updateEvidenceStatus(id: string, status: CaseStatus, note?: string) {
+  const data = getEvidenceData();
+  const index = data.findIndex(i => i.id === id);
+  if (index !== -1) {
+    data[index].status = status;
+    if (note) data[index].statusNote = note;
+    localStorage.setItem("kuboyako_evidence", JSON.stringify(data));
+  }
 }
 
 export function searchEvidence(type: SearchType, query: string): EvidenceItem | undefined {

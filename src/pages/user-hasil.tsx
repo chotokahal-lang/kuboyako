@@ -217,6 +217,38 @@ export default function UserHasil() {
                   </div>
                 )}
 
+                {/* Status Kasus */}
+                <div className={`rounded-2xl p-4 border ${
+                  result!.status === 'selesai' ? 'bg-emerald-500/10 border-emerald-500/30' :
+                  result!.status === 'proses' ? 'bg-orange-500/10 border-orange-500/30' :
+                  'bg-blue-500/10 border-blue-500/30'
+                }`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black ${
+                      result!.status === 'selesai' ? 'bg-emerald-500/20 text-emerald-400' :
+                      result!.status === 'proses' ? 'bg-orange-500/20 text-orange-400' :
+                      'bg-blue-500/20 text-blue-400'
+                    }`}>
+                      {result!.status === 'selesai' ? '✓' : result!.status === 'proses' ? '◎' : '●'}
+                    </span>
+                    <div>
+                      <p className="eyebrow mb-0.5">Status Kasus</p>
+                      <p className={`text-sm font-black uppercase ${
+                        result!.status === 'selesai' ? 'text-emerald-400' :
+                        result!.status === 'proses' ? 'text-orange-400' :
+                        'text-blue-400'
+                      }`}>
+                        {result!.status === 'selesai' ? 'Kasus Selesai' : result!.status === 'proses' ? 'Sedang Diproses' : 'Laporan Baru'}
+                      </p>
+                    </div>
+                  </div>
+                  {result!.statusNote && (
+                    <p className="text-[11px] text-muted-foreground leading-relaxed mt-2 pl-11 italic">
+                      {result!.statusNote}
+                    </p>
+                  )}
+                </div>
+
                 {/* Tombol Lapor — khusus Umum */}
                 {isUmum && (
                   <motion.div

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, Filter, ChevronRight, Trash2, Download, Edit2, Save, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getEvidenceData, EvidenceItem, deleteEvidenceItem, updateEvidenceItem, addLog } from "@/lib/store";
+import { getEvidenceData, EvidenceItem, deleteEvidenceItem, updateEvidenceItem, updateEvidenceStatus, addLog, CaseStatus } from "@/lib/store";
 import { exportToCsv } from "@/lib/export";
 import { PageHeader } from "@/components/layout/page-header";
 import { icons3d } from "@/assets/icons";
@@ -91,6 +91,8 @@ export default function AdminRiwayat() {
       asalLp: formData.get("asalLp") as string,
       merk: formData.get("merk") as string,
       warna: formData.get("warna") as string,
+      status: (formData.get("status") as CaseStatus) || editingItem.status || 'baru',
+      statusNote: (formData.get("statusNote") as string) || editingItem.statusNote || '',
       ...(editingItem.type === "hp" 
         ? { imei1: formData.get("imei1") as string }
         : { noPolisi: formData.get("noPolisi") as string })
@@ -190,8 +192,12 @@ export default function AdminRiwayat() {
                         <h3 className="font-bold text-foreground text-base tracking-tight uppercase truncate group-hover:text-primary transition-colors">
                           {primary}
                         </h3>
-                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded-md bg-accent/20 text-accent uppercase tracking-tighter shrink-0">
-                          Aktif
+                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-tighter shrink-0 ${
+                          item.status === 'selesai' ? 'bg-emerald-500/20 text-emerald-400' :
+                          item.status === 'proses' ? 'bg-orange-500/20 text-orange-400' :
+                          'bg-blue-500/20 text-blue-400'
+                        }`}>
+                          {item.status === 'selesai' ? '✓ Selesai' : item.status === 'proses' ? '◎ Proses' : '● Baru'}
                         </span>
                       </div>
                       <p className="text-[11px] text-muted-foreground truncate">{sub}</p>
@@ -203,6 +209,9 @@ export default function AdminRiwayat() {
                           {new Date(item.createdAt).toLocaleDateString("id-ID")}
                         </p>
                       </div>
+                      {item.statusNote && (
+                        <p className="text-[9px] text-muted-foreground/80 mt-1 italic truncate">{item.statusNote}</p>
+                      )}
                     </div>
                       <div className="flex items-center gap-2">
                         <button
@@ -289,6 +298,30 @@ export default function AdminRiwayat() {
                 </div>
                 
                 <EditField label="Warna" name="warna" defaultValue={editingItem.warna} />
+
+                <div>
+                  <label className="eyebrow ml-1">Status Kasus</label>
+                  <select
+                    name="status"
+                    defaultValue={editingItem.status || 'baru'}
+                    className="mt-1.5 w-full h-11 px-4 surface rounded-xl bg-transparent outline-none text-sm font-medium text-foreground focus:ring-2 focus:ring-primary/40 transition-all"
+                  >
+                    <option value="baru" className="bg-background">● Baru — Laporan Diterima</option>
+                    <option value="proses" className="bg-background">◎ Proses — Sedang Ditangani</option>
+                    <option value="selesai" className="bg-background">✓ Selesai — Kasus Tuntas</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="eyebrow ml-1">Catatan Status</label>
+                  <textarea
+                    name="statusNote"
+                    defaultValue={editingItem.statusNote || ''}
+                    rows={2}
+                    placeholder="Tambahkan keterangan status..."
+                    className="mt-1.5 w-full px-4 py-3 surface rounded-xl bg-transparent outline-none text-sm font-medium text-foreground focus:ring-2 focus:ring-primary/40 transition-all resize-none"
+                  />
+                </div>
               </form>
 
               <div className="grid grid-cols-2 gap-4 mt-8">

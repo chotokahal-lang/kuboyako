@@ -4,6 +4,7 @@ import { Quote, Star, ShieldCheck, Zap, Globe, Rocket, Users, ChevronRight, Arro
 import { Link } from "react-router-dom";
 import { LiveText } from "@/components/ui/live-text";
 import { Logo3DImg } from "@/components/ui/logo-3d-img";
+import { useLiveEditStore } from "@/store/useLiveEditStore";
 
 const testimonials = [
   {
@@ -52,13 +53,17 @@ const testimonials = [
 
 export default function TestimoniPage() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const isEditMode = useLiveEditStore(s => s.isEditMode);
 
   useEffect(() => {
+    // PAUSE the auto-slider completely if Live Edit mode is active
+    if (isEditMode) return;
+
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % testimonials.length);
     }, 5000); 
     return () => clearInterval(interval);
-  }, []);
+  }, [isEditMode]);
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden font-outfit">

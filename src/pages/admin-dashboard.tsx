@@ -55,7 +55,7 @@ export default function AdminDashboard() {
     { title: "Manajemen Akun", desc: "Kelola akun Anggota Polri", href: "/admin/accounts", icon: icons3d.user },
     { title: "Log Aktivitas", desc: "Riwayat penggunaan sistem", href: "/admin/logs", icon: icons3d.archive },
     { title: "Status Penginputan", desc: "Riwayat & arsip data BB", href: "/admin/riwayat", icon: icons3d.archive },
-    { title: "Suara Pemimpin Bangsa", desc: "Testimoni dukungan nasional", href: "/testimoni", icon: icons3d.shield, isEpic: true },
+    { title: "Ulasan Tentang Aplikasi", desc: "Testimoni & kesaksian nyata", href: "/testimoni", icon: icons3d.shield, isEpic: true },
   ];
 
   const handleResetSystem = () => {

@@ -160,8 +160,8 @@ export default function UserDashboard() {
               <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-black text-foreground uppercase tracking-tight"><LiveText as="span" id="testi-card-title" defaultText="Suara Pemimpin Bangsa" /></p>
-              <p className="text-xs text-primary/70 mt-0.5 font-bold"><LiveText as="span" id="testi-card-desc" defaultText="Dukungan Nasional untuk KUBOYAKO" /></p>
+              <p className="text-sm font-black text-foreground uppercase tracking-tight"><LiveText as="span" id="testi-real-card-title" defaultText="Ulasan Tentang Aplikasi" /></p>
+              <p className="text-xs text-primary/70 mt-0.5 font-bold"><LiveText as="span" id="testi-real-card-desc" defaultText="Kesaksian Nyata Pengguna KUBOYAKO" /></p>
             </div>
             <ChevronRight className="w-4 h-4 text-primary" />
           </motion.div>

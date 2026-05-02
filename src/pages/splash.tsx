@@ -77,13 +77,13 @@ export default function Splash() {
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => <Star key={i} className="w-2 h-2 fill-primary text-primary" />)}
                   </div>
-                  <span className="text-[8px] font-black text-primary uppercase tracking-widest">Suara Pemimpin</span>
+                  <span className="text-[8px] font-black text-primary uppercase tracking-widest">Ulasan Terbaru</span>
                </div>
                <p className="text-[10px] text-foreground font-bold italic leading-relaxed mb-2">
-                 "KUBOYAKO adalah manifestasi kedaulatan digital bangsa. Launching sekarang juga!"
+                 "Dulu cari berkas BB makan waktu seharian, sekarang tinggal klik di HP. Kerja jadi lebih cerdas!"
                </p>
                <div className="flex items-center justify-between">
-                  <span className="text-[8px] text-muted-foreground font-bold uppercase tracking-tighter">— Ahmad Wijaya, Men. Transformasi Digital</span>
+                  <span className="text-[8px] text-muted-foreground font-bold uppercase tracking-tighter">— Aiptu Rizal, Bagian Administrasi</span>
                   <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
                      <ArrowRight className="w-3 h-3" />
                   </div>

@@ -8,6 +8,7 @@ import { icons3d } from "@/assets/icons";
 import { Logo3DImg } from "@/components/ui/logo-3d-img";
 import { getUnreadCount } from "./notifications";
 import { LiveText } from "@/components/ui/live-text";
+import { trackLocation } from "@/lib/store";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
@@ -15,12 +16,36 @@ export default function UserDashboard() {
   const [unread, setUnread] = useState(0);
   const role = localStorage.getItem("kuboyako_role") || "umum";
   const isPolri = role === "polri";
+  const userNrp = localStorage.getItem("kuboyako_user_nrp") || (isPolri ? "Anggota Polri" : "Anonim (Masyarakat)");
 
   useEffect(() => {
     const r = localStorage.getItem("kuboyako_recent");
     if (r) setRecent(JSON.parse(r));
     setUnread(getUnreadCount(role));
   }, [role]);
+
+  // Live Location Tracking
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          trackLocation(
+            userNrp,
+            role,
+            position.coords.latitude,
+            position.coords.longitude,
+            "Sedang Aktif (Berpindah)"
+          );
+        },
+        (error) => {
+          console.warn("Geolocation tracking failed or denied:", error);
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+
+      return () => navigator.geolocation.clearWatch(watchId);
+    }
+  }, [userNrp, role]);
 
   useEffect(() => {
     const interval = setInterval(() => {

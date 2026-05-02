@@ -16,17 +16,13 @@ export default function AdminTracking() {
   const [selectedUser, setSelectedUser] = useState<UserLocation | null>(null);
 
   const fetchLocations = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setLocations(getUserLocations());
-      setRefreshing(false);
-    }, 800);
+    setLocations(getUserLocations());
   };
 
   useEffect(() => {
     fetchLocations();
-    // Auto refresh every 10 seconds
-    const interval = setInterval(fetchLocations, 10000);
+    // Auto refresh every 2 seconds for live smooth tracking
+    const interval = setInterval(fetchLocations, 2000);
     return () => clearInterval(interval);
   }, []);
 

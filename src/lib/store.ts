@@ -478,16 +478,32 @@ export function getUserLocations(): UserLocation[] {
 
 export function trackLocation(user: string, role: string, lat: number, lng: number, action: string) {
   const locations = getUserLocations();
-  const newLoc: UserLocation = {
-    id: Math.random().toString(36).slice(2, 11),
-    timestamp: Date.now(),
-    user,
-    role,
-    lat,
-    lng,
-    action
-  };
-  locations.unshift(newLoc);
+  
+  // Find if user already has an active location session (within the last 30 minutes)
+  const existingIndex = locations.findIndex(
+    loc => loc.user === user && (Date.now() - loc.timestamp < 1000 * 60 * 30)
+  );
+
+  if (existingIndex >= 0) {
+    // Update existing position to create movement effect
+    locations[existingIndex].lat = lat;
+    locations[existingIndex].lng = lng;
+    locations[existingIndex].action = action;
+    locations[existingIndex].timestamp = Date.now();
+  } else {
+    // Create new entry
+    const newLoc: UserLocation = {
+      id: Math.random().toString(36).slice(2, 11),
+      timestamp: Date.now(),
+      user,
+      role,
+      lat,
+      lng,
+      action
+    };
+    locations.unshift(newLoc);
+  }
+  
   localStorage.setItem("kuboyako_locations", JSON.stringify(locations.slice(0, 100))); // Keep last 100
 }
 

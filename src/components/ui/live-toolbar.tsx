@@ -106,26 +106,20 @@ export function LiveToolbar() {
     if (!file || !activeElementId) return;
     try {
       const reader = new FileReader();
-      reader.onloadend = async () => {
+      reader.onloadend = () => {
         const base64 = reader.result as string;
-        const res = await fetch("/api/upload-image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename: file.name, base64 }),
-        });
-        const data = await res.json();
-        if (data.url) {
-          setImage(activeElementId, data.url);
-          if (!isImage) {
-             const el = document.getElementById("central-editor");
-             if (el) el.focus();
-             setTimeout(() => document.execCommand("insertImage", false, data.url), 50);
-          }
+        // Directly set the base64 as the image source in the store
+        setImage(activeElementId, base64);
+        
+        if (!isImage) {
+           const el = document.getElementById("central-editor");
+           if (el) el.focus();
+           setTimeout(() => document.execCommand("insertImage", false, base64), 50);
         }
       };
       reader.readAsDataURL(file);
     } catch (err) {
-      console.error(err);
+      console.error("Image upload error:", err);
     }
     e.target.value = "";
   };
@@ -210,11 +204,7 @@ export function LiveToolbar() {
                   <div className="flex flex-col items-center justify-center gap-6 py-10">
                      <div className="w-48 h-48 rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative group">
                         <img 
-                          src={
-                            document.getElementById(activeElementId!)?.getAttribute("src") || 
-                            document.getElementById(activeElementId!)?.querySelector("img")?.getAttribute("src") || 
-                            ""
-                          } 
+                          src={useLiveEditStore.getState().images[activeElementId!] || document.getElementById(activeElementId!)?.getAttribute("src") || document.getElementById(activeElementId!)?.querySelector("img")?.getAttribute("src") || ""} 
                           className="w-full h-full object-cover"
                           alt="Edit"
                         />

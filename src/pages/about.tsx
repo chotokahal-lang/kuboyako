@@ -165,6 +165,40 @@ export default function About() {
           <p className="eyebrow text-muted-foreground/40 text-[9px]">
             <LiveText as="span" id="about-footer" defaultText="KUBOYAKO · RESMOB POLDA SULSEL · 2026 · Hak Cipta Dilindungi" />
           </p>
+        {/* Review Teknologi */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="surface-elevated rounded-2xl overflow-hidden border border-primary/20"
+        >
+          <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-primary fill-primary" />
+              <p className="eyebrow text-[10px]">Ulasan Teknologi</p>
+            </div>
+            <div className="flex gap-0.5">
+               {[...Array(5)].map((_, i) => <Star key={i} className="w-2 h-2 fill-primary text-primary" />)}
+            </div>
+          </div>
+          <div className="px-4 py-5 space-y-4">
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-title-1" defaultText="Estetika & Desain" /></p>
+                <p className="text-[11px] text-muted-foreground leading-relaxed italic">
+                  <LiveText id="about-rev-desc-1" defaultText="KUBOYAKO mendobrak standar aplikasi pemerintahan yang biasanya kaku. Dengan '2030 Cinematic Aesthetic', aplikasi ini memberikan kesan prestisius melalui Glassmorphism dan pencahayaan dinamis yang hidup." />
+                </p>
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-title-2" defaultText="Fitur Unggulan" /></p>
+                <p className="text-[11px] text-muted-foreground leading-relaxed italic">
+                  <LiveText id="about-rev-desc-2" defaultText="Sistem Pencarian Real-Time dan Live Edit System (WYSIWYG) adalah mahakarya inovasi. Memungkinkan fleksibilitas luar biasa bagi Admin tanpa menyentuh kode, sebuah lompatan kuantum birokrasi digital." />
+                </p>
+             </div>
+             <div className="space-y-1 border-t border-white/5 pt-3">
+                <p className="text-[11px] font-bold text-foreground leading-tight"><LiveText id="about-rev-sum-title" defaultText="Rating: 5/5 — Sempurna & Visioner" /></p>
+                <p className="text-[10px] text-primary/80 font-bold italic"><LiveText id="about-rev-sum-desc" defaultText="\"Standard baru penegakan hukum digital di era industri 4.0.\"" /></p>
+             </div>
+          </div>
         </motion.div>
       </div>
     </div>

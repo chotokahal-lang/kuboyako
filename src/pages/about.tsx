@@ -165,6 +165,8 @@ export default function About() {
           <p className="eyebrow text-muted-foreground/40 text-[9px]">
             <LiveText as="span" id="about-footer" defaultText="KUBOYAKO · RESMOB POLDA SULSEL · 2026 · Hak Cipta Dilindungi" />
           </p>
+        </motion.div>
+
         {/* Review Tentang Aplikasi */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -185,20 +187,20 @@ export default function About() {
              <div className="space-y-1">
                 <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-real-rev-tag-1" defaultText="Testimoni Lapangan" /></p>
                 <p className="text-[11px] text-foreground font-bold leading-relaxed italic">
-                  <LiveText id="about-real-rev-content-1" defaultText='"Sangat membantu tugas lapangan. Data barang bukti jadi rapi dan gampang dicari. Gak perlu ribet buka buku besar lagi. Efisiensi kerja naik drastis!"' />
+                  <LiveText id="about-real-rev-content-1" defaultText={'"Sangat membantu tugas lapangan. Data barang bukti jadi rapi dan gampang dicari. Gak perlu ribet buka buku besar lagi. Efisiensi kerja naik drastis!"'} />
                 </p>
                 <p className="text-[9px] text-muted-foreground">— Anggota Opsnal Resmob</p>
              </div>
              <div className="space-y-1">
                 <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-real-rev-tag-2" defaultText="Kesan Pengguna" /></p>
                 <p className="text-[11px] text-foreground font-bold leading-relaxed italic">
-                  <LiveText id="about-real-rev-content-2" defaultText='"Tampilannya gila sih, keren banget! Pak Bos juga senang liatnya pas presentasi. Bangga punya sistem se-canggih ini di Polda Sulsel."' />
+                  <LiveText id="about-real-rev-content-2" defaultText={'"Tampilannya gila sih, keren banget! Pak Bos juga senang liatnya pas presentasi. Bangga punya sistem se-canggih ini di Polda Sulsel."'} />
                 </p>
                 <p className="text-[9px] text-muted-foreground">— Operator Data Ditkrimum</p>
              </div>
              <div className="space-y-1 border-t border-white/5 pt-3">
                 <p className="text-[11px] font-bold text-foreground leading-tight"><LiveText id="about-rev-sum-title" defaultText="Inovasi Nyata Untuk Polri" /></p>
-                <p className="text-[10px] text-primary font-black italic uppercase tracking-tighter"><LiveText id="about-rev-sum-desc" defaultText='"Era baru penegakan hukum digital yang praktis dan terpercaya."' /></p>
+                <p className="text-[10px] text-primary font-black italic uppercase tracking-tighter"><LiveText id="about-rev-sum-desc" defaultText={'"Era baru penegakan hukum digital yang praktis dan terpercaya."'} /></p>
              </div>
           </div>
         </motion.div>

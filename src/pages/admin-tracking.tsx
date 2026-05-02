@@ -223,8 +223,7 @@ export default function AdminTracking() {
             </motion.div>
           )}
         </AnimatePresence>
-        
-        {locations.length === 0 && !refreshing && (
+        {locations.length === 0 && (
           <div className="text-center p-6 text-white/50">
             <p className="text-sm">Belum ada aktivitas lokasi terekam.</p>
           </div>

@@ -267,26 +267,26 @@ export function searchEvidence(type: SearchType, query: string): EvidenceItem | 
 
   return data.find(item => {
     if (item.type !== type) return false;
-    
+
     if (item.type === 'mobil' || item.type === 'motor') {
       const v = item as VehicleItem;
       // Search in Plate, Chassis (Rangka), and Engine (Mesin)
       const nopol = v.noPolisi.toLowerCase().replace(/[^a-z0-9]/g, "");
       const rangka = v.noRangka.toLowerCase().replace(/[^a-z0-9]/g, "");
       const mesin = v.noMesin.toLowerCase().replace(/[^a-z0-9]/g, "");
-      
+
       return nopol.includes(q) || rangka.includes(q) || mesin.includes(q);
     }
-    
+
     if (item.type === 'hp') {
       const h = item as HpItem;
       // Search in IMEI 1 and IMEI 2
       const imei1 = h.imei1.replace(/[^0-9]/g, "");
       const imei2 = h.imei2?.replace(/[^0-9]/g, "") || "";
-      
+
       return imei1.includes(q) || imei2.includes(q);
     }
-    
+
     return false;
   });
 }

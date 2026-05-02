@@ -8,6 +8,9 @@ const config: CapacitorConfig = {
     url: 'https://www.kuboyako.com',
     cleartext: true
   },
+  android: {
+    adjustMarginsForEdgeToEdge: true
+  },
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,

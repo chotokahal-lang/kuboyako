@@ -145,6 +145,9 @@ export default function UserHasil() {
                 </div>
                 <h1 className="display-font text-2xl text-foreground"><LiveText as="span" id="hasil-danger-title" defaultText="Terdeteksi!" /></h1>
                 <p className="eyebrow text-destructive mt-1"><LiveText as="span" id="hasil-danger-subtitle" defaultText="Tercatat sebagai Barang Bukti" /></p>
+                <p className="text-[9px] text-muted-foreground/60 mt-3 font-mono">
+                  Waktu verifikasi: {new Date().toLocaleString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} WITA
+                </p>
               </div>
 
               {/* Identitas unit */}
@@ -170,6 +173,7 @@ export default function UserHasil() {
                     <p className="text-xs text-muted-foreground truncate">
                       {result!.merk}{" "}
                       {(result as any).tipe || (result as any).jenis || (result as any).model}
+                      {" · "}{result!.warna}
                     </p>
                     {result!.type !== "hp" && (
                       <div className="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1">
@@ -179,9 +183,24 @@ export default function UserHasil() {
                         <p className="text-[10px] text-muted-foreground">
                           No. Rangka: <span className="text-foreground font-mono">{(result as any).noRangka}</span>
                         </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          Tahun: <span className="text-foreground font-mono">{(result as any).tahun}</span>
+                        </p>
                       </div>
                     )}
+                    {result!.type === "hp" && (result as any).imei2 && (
+                      <p className="text-[10px] text-muted-foreground mt-1">
+                        IMEI 2: <span className="text-foreground font-mono">{(result as any).imei2}</span>
+                      </p>
+                    )}
                   </div>
+                </div>
+
+                {/* Info Pelapor — tampil untuk semua */}
+                <div className="surface rounded-2xl p-4">
+                  <p className="eyebrow mb-2">Data Pelapor</p>
+                  <p className="text-sm font-bold text-foreground uppercase">{result!.pelapor}</p>
+                  <p className="text-[10px] text-muted-foreground mt-1">Tanggal Lapor: {new Date(result!.tglLp).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
 
                 {/* Detail LP — hanya untuk Polri & Admin */}

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, Clock, ChevronRight, Search, Phone, AlertTriangle, Bell } from "lucide-react";
+import { LogOut, Clock, ChevronRight, Search, Phone, AlertTriangle, Bell, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Icon3D } from "@/components/ui/icon-3d";
@@ -142,6 +142,31 @@ export default function UserDashboard() {
           </Link>
         </motion.div>
       )}
+
+      {/* Testimonials Quick Link */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+        className="px-6 mb-6"
+      >
+        <Link to="/testimoni">
+          <motion.div
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="surface-elevated rounded-2xl p-4 flex items-center gap-4 border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent shadow-glow"
+          >
+            <span className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/20">
+              <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-black text-foreground uppercase tracking-tight"><LiveText as="span" id="testi-card-title" defaultText="Suara Pemimpin Bangsa" /></p>
+              <p className="text-xs text-primary/70 mt-0.5 font-bold"><LiveText as="span" id="testi-card-desc" defaultText="Dukungan Nasional untuk KUBOYAKO" /></p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-primary" />
+          </motion.div>
+        </Link>
+      </motion.div>
 
       {/* Recent */}
       <section className="px-6">

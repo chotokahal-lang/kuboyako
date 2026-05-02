@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, ChevronRight, ShieldCheck, Bell, RefreshCcw } from "lucide-react";
+import { LogOut, ChevronRight, ShieldCheck, Bell, RefreshCcw, Star } from "lucide-react";
 import { getEvidenceData, EvidenceItem } from "@/lib/store";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
@@ -55,6 +55,7 @@ export default function AdminDashboard() {
     { title: "Manajemen Akun", desc: "Kelola akun Anggota Polri", href: "/admin/accounts", icon: icons3d.user },
     { title: "Log Aktivitas", desc: "Riwayat penggunaan sistem", href: "/admin/logs", icon: icons3d.archive },
     { title: "Status Penginputan", desc: "Riwayat & arsip data BB", href: "/admin/riwayat", icon: icons3d.archive },
+    { title: "Suara Pemimpin Bangsa", desc: "Testimoni dukungan nasional", href: "/testimoni", icon: icons3d.shield, isEpic: true },
   ];
 
   const handleResetSystem = () => {
@@ -197,15 +198,16 @@ export default function AdminDashboard() {
                 className="surface-elevated rounded-2xl p-4 flex items-center gap-4 group cursor-pointer"
               >
                 <Icon3D src={a.icon} alt={a.title} size="md" tone={i === 1 ? "accent" : "primary"} />
-                <div className="flex-1 min-w-0">
-                  <h3 className="display-font text-base text-foreground leading-tight">
+                <div className={`flex-1 min-w-0 ${a.isEpic ? "text-primary-foreground" : ""}`}>
+                  <h3 className={`display-font text-base leading-tight ${a.isEpic ? "text-primary" : "text-foreground"}`}>
                     <LiveText as="span" id={`action-title-${i}`} defaultText={a.title} />
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                  <p className={`text-xs mt-0.5 truncate ${a.isEpic ? "text-primary/70" : "text-muted-foreground"}`}>
                     <LiveText as="span" id={`action-desc-${i}`} defaultText={a.desc} />
                   </p>
                 </div>
-                <span className="w-9 h-9 rounded-full surface-glass flex items-center justify-center text-foreground/60 group-hover:text-primary transition-colors">
+                {a.isEpic && <Star className="w-4 h-4 text-primary fill-primary animate-pulse" />}
+                <span className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${a.isEpic ? "bg-primary/20 text-primary" : "surface-glass text-foreground/60 group-hover:text-primary"}`}>
                   <ChevronRight className="w-4 h-4" />
                 </span>
               </motion.div>

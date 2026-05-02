@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, Filter, ChevronRight, Trash2, Download, Edit2, Save, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { getEvidenceData, EvidenceItem, deleteEvidenceItem, addLog } from "@/lib/store";
+import { getEvidenceData, EvidenceItem, deleteEvidenceItem, updateEvidenceItem, addLog } from "@/lib/store";
 import { exportToCsv } from "@/lib/export";
 import { PageHeader } from "@/components/layout/page-header";
 import { icons3d } from "@/assets/icons";
@@ -20,6 +20,7 @@ export default function AdminRiwayat() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<(typeof filters)[number]["id"]>("semua");
   const [editingItem, setEditingItem] = useState<EvidenceItem | null>(null);
+  const [deletingItem, setDeletingItem] = useState<{ id: string, noLp: string } | null>(null);
 
   useEffect(() => {
     setData(getEvidenceData().sort((a, b) => b.createdAt - a.createdAt));
@@ -50,14 +51,14 @@ export default function AdminRiwayat() {
     return nopol.includes(q) || rangka.includes(q) || mesin.includes(q) || merk.includes(q) || lp.includes(q);
   });
 
-  const handleDelete = (id: string, noLp: string) => {
-    if (confirm(`Hapus data barang bukti LP: ${noLp}?`)) {
-      deleteEvidenceItem(id);
-      setData(data.filter(it => it.id !== id));
-      
-      const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
-      addLog(adminNrp, "admin", "DELETE_EVIDENCE", `Menghapus data BB: ${noLp}`);
-    }
+  const confirmDelete = () => {
+    if (!deletingItem) return;
+    deleteEvidenceItem(deletingItem.id);
+    setData(data.filter(it => it.id !== deletingItem.id));
+    
+    const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
+    addLog(adminNrp, "admin", "DELETE_EVIDENCE", `Menghapus data BB: ${deletingItem.noLp}`);
+    setDeletingItem(null);
   };
 
   const handleExport = () => {
@@ -218,7 +219,7 @@ export default function AdminRiwayat() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleDelete(item.id, item.noLp);
+                            setDeletingItem({ id: item.id, noLp: item.noLp });
                           }}
                           className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
                         >
@@ -250,24 +251,29 @@ export default function AdminRiwayat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-xl flex items-end sm:items-center justify-center p-4"
+            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
           >
             <motion.div
-              initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              exit={{ y: 100 }}
-              className="w-full max-w-md surface-elevated rounded-3xl p-6 shadow-2xl relative"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="w-full max-w-md surface-elevated rounded-[2.5rem] p-8 border border-white/10 shadow-2xl relative"
             >
               <button
                 onClick={() => setEditingItem(null)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full surface-glass flex items-center justify-center text-muted-foreground"
+                className="absolute top-6 right-6 w-10 h-10 rounded-full surface-glass flex items-center justify-center text-muted-foreground hover:text-white transition-colors"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
 
-              <h2 className="display-font text-xl text-foreground mb-6">Edit Data Barang Bukti</h2>
+              <div className="w-16 h-16 rounded-[1.5rem] bg-primary/10 flex items-center justify-center text-primary mb-6">
+                 <Edit2 className="w-8 h-8" />
+              </div>
+
+              <h2 className="display-font text-2xl text-foreground mb-2">Perbarui Data</h2>
+              <p className="text-xs text-muted-foreground mb-8">Ubah informasi barang bukti secara akurat.</p>
               
-              <form onSubmit={handleUpdate} className="space-y-4 max-h-[70vh] overflow-y-auto px-1 pb-4 scrollbar-hide">
+              <form onSubmit={handleUpdate} className="space-y-4 max-h-[50vh] overflow-y-auto px-1 pb-4 custom-scrollbar">
                 <EditField label="Nomor LP" name="noLp" defaultValue={editingItem.noLp} />
                 <EditField label="Pelapor" name="pelapor" defaultValue={editingItem.pelapor} />
                 <EditField label="Lokasi TKP" name="lokasiTkp" defaultValue={editingItem.lokasiTkp} />
@@ -283,17 +289,67 @@ export default function AdminRiwayat() {
                 </div>
                 
                 <EditField label="Warna" name="warna" defaultValue={editingItem.warna} />
-
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="w-full h-12 rounded-xl gradient-primary text-primary-foreground font-bold flex items-center justify-center gap-2"
-                  >
-                    <Save className="w-4 h-4" />
-                    Perbarui Data
-                  </button>
-                </div>
               </form>
+
+              <div className="grid grid-cols-2 gap-4 mt-8">
+                  <button
+                    type="button"
+                    onClick={() => setEditingItem(null)}
+                    className="h-14 rounded-2xl surface-glass border border-white/5 font-bold text-sm text-foreground hover:bg-white/5"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    onClick={() => (document.querySelector('form') as any)?.requestSubmit()}
+                    className="h-14 rounded-2xl gradient-primary text-primary-foreground font-bold text-sm shadow-glow"
+                  >
+                    Simpan
+                  </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {deletingItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-lg flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 30 }}
+              className="w-full max-w-sm surface-elevated rounded-[2.5rem] p-8 border border-white/10 shadow-[0_32px_64px_rgba(0,0,0,0.5)] text-center"
+            >
+              <div className="w-20 h-20 rounded-[2rem] bg-destructive/10 flex items-center justify-center text-destructive mx-auto mb-6">
+                <Trash2 className="w-10 h-10" />
+              </div>
+              
+              <h3 className="display-font text-2xl text-foreground mb-2">Hapus Arsip?</h3>
+              <p className="text-xs text-muted-foreground mb-8 leading-relaxed">
+                Anda akan menghapus data LP: <br/>
+                <span className="text-foreground font-bold mt-1 inline-block">{deletingItem.noLp}</span>
+                <br/><br/>
+                Tindakan ini tidak dapat dibatalkan.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setDeletingItem(null)}
+                  className="h-14 rounded-2xl surface-glass border border-white/5 font-bold text-sm text-foreground"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="h-14 rounded-2xl bg-destructive text-white font-black text-sm shadow-[0_10px_20px_rgba(239,68,68,0.3)]"
+                >
+                  HAPUS
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}

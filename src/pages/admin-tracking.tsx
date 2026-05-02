@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Map, ArrowLeft, RefreshCw, Crosshair, Users, MapPin, Activity, Play, Square } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +11,7 @@ const CENTER_LAT = -5.147665;
 const CENTER_LNG = 119.432731;
 
 export default function AdminTracking() {
+  const mapRef = useRef<HTMLDivElement>(null);
   const [locations, setLocations] = useState<UserLocation[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserLocation | null>(null);
   const [simulationActive, setSimulationActive] = useState(true);
@@ -115,49 +116,63 @@ export default function AdminTracking() {
         </div>
 
         {/* Map Container */}
-        <div className="relative w-full aspect-square rounded-[2.5rem] surface-glass border border-emerald-500/20 overflow-hidden bg-[#02050A] shadow-[0_0_80px_rgba(16,185,129,0.15)] group">
-          {/* Real Map Background of Makassar */}
-          <iframe 
-            src="https://www.openstreetmap.org/export/embed.html?bbox=119.35,-5.20,119.50,-5.10&layer=mapnik" 
-            className="absolute inset-0 w-full h-full pointer-events-none opacity-60 mix-blend-screen transition-opacity duration-1000 scale-[1.05]"
-            style={{ filter: 'invert(1) hue-rotate(160deg) saturate(3) brightness(0.9) contrast(1.5)' }}
-            title="Makassar Tactical Map"
-          />
-
-          {/* Scanning Radar Animation */}
-          <div className="absolute inset-0 border-2 border-emerald-500/20 rounded-[2.5rem] mix-blend-screen" />
-          <div className="absolute left-1/2 top-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2" style={{ background: 'conic-gradient(from 0deg, transparent 60%, rgba(16,185,129,0.15) 100%)', animation: 'spin 4s linear infinite' }} />
-          <div className="absolute left-1/2 top-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 border border-emerald-500/20 rounded-full" />
-          <div className="absolute left-1/2 top-1/2 w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 border border-emerald-500/20 rounded-full" />
+        <div ref={mapRef} className="relative w-full aspect-square rounded-[2.5rem] surface-glass border border-emerald-500/20 overflow-hidden bg-[#02050A] shadow-[0_0_80px_rgba(16,185,129,0.15)] group">
           
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-emerald-500/30" />
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-emerald-500/30" />
+          {/* Draggable Map Layer */}
+          <motion.div 
+            drag
+            dragConstraints={mapRef}
+            dragElastic={0.1}
+            whileDrag={{ scale: 1.01 }}
+            className="absolute inset-0 w-[200%] h-[200%] left-[-50%] top-[-50%] cursor-grab active:cursor-grabbing"
+          >
+            {/* Real Map Background of Makassar */}
+            <iframe 
+              src="https://www.openstreetmap.org/export/embed.html?bbox=119.35,-5.20,119.50,-5.10&layer=mapnik" 
+              className="absolute inset-0 w-full h-full pointer-events-none opacity-60 mix-blend-screen transition-opacity duration-1000"
+              style={{ filter: 'invert(1) hue-rotate(160deg) saturate(3) brightness(0.9) contrast(1.5)' }}
+              title="Makassar Tactical Map"
+            />
+
+            {/* Location Markers */}
+            {locations.map((loc) => {
+              const pos = getPosition(loc.lat, loc.lng);
+              const isPolri = loc.role === 'polri' || loc.role === 'admin';
+              return (
+                <motion.div
+                  key={loc.id}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+                  style={pos}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedUser(loc);
+                  }}
+                  whileHover={{ scale: 1.5 }}
+                >
+                  <div className={`relative flex items-center justify-center w-8 h-8 rounded-full ${isPolri ? 'bg-blue-500/20' : 'bg-emerald-500/20'}`}>
+                    <div className={`absolute inset-0 rounded-full animate-ping opacity-50 ${isPolri ? 'bg-blue-400' : 'bg-emerald-400'}`} />
+                    <MapPin className={`w-4 h-4 ${isPolri ? 'text-blue-400' : 'text-emerald-400'}`} />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+
+          {/* Scanning Radar Animation (Fixed Overlay) */}
+          <div className="absolute inset-0 border-2 border-emerald-500/20 rounded-[2.5rem] mix-blend-screen pointer-events-none" />
+          <div className="absolute left-1/2 top-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ background: 'conic-gradient(from 0deg, transparent 60%, rgba(16,185,129,0.15) 100%)', animation: 'spin 4s linear infinite' }} />
+          <div className="absolute left-1/2 top-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 border border-emerald-500/20 rounded-full pointer-events-none" />
+          <div className="absolute left-1/2 top-1/2 w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 border border-emerald-500/20 rounded-full pointer-events-none" />
+          
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-emerald-500/30 pointer-events-none" />
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-emerald-500/30 pointer-events-none" />
 
           {/* Crosshair Center */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-500/50">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-500/50 pointer-events-none">
             <Crosshair className="w-6 h-6 animate-pulse" />
           </div>
-
-          {/* Location Markers */}
-          {locations.map((loc) => {
-            const pos = getPosition(loc.lat, loc.lng);
-            const isPolri = loc.role === 'polri' || loc.role === 'admin';
-            return (
-              <motion.div
-                key={loc.id}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
-                style={pos}
-                onClick={() => setSelectedUser(loc)}
-              >
-                <div className={`relative flex items-center justify-center w-8 h-8 rounded-full ${isPolri ? 'bg-blue-500/20' : 'bg-emerald-500/20'}`}>
-                  <div className={`absolute inset-0 rounded-full animate-ping opacity-50 ${isPolri ? 'bg-blue-400' : 'bg-emerald-400'}`} />
-                  <MapPin className={`w-4 h-4 ${isPolri ? 'text-blue-400' : 'text-emerald-400'}`} />
-                </div>
-              </motion.div>
-            );
-          })}
         </div>
 
         {/* Selected User Details */}

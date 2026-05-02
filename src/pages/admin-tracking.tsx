@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Map, ArrowLeft, RefreshCw, Crosshair, Users, MapPin, Activity } from "lucide-react";
+import { Map, ArrowLeft, RefreshCw, Crosshair, Users, MapPin, Activity, Play, Square } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getUserLocations, UserLocation } from "@/lib/store";
+import { getUserLocations, UserLocation, trackLocation } from "@/lib/store";
 import { PageHeader } from "@/components/layout/page-header";
 import { LiveText } from "@/components/ui/live-text";
 
@@ -12,8 +12,8 @@ const CENTER_LNG = 119.432731;
 
 export default function AdminTracking() {
   const [locations, setLocations] = useState<UserLocation[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserLocation | null>(null);
+  const [simulationActive, setSimulationActive] = useState(true);
 
   const fetchLocations = () => {
     setLocations(getUserLocations());
@@ -25,6 +25,24 @@ export default function AdminTracking() {
     const interval = setInterval(fetchLocations, 2000);
     return () => clearInterval(interval);
   }, []);
+
+  // Moving Simulation Logic
+  useEffect(() => {
+    if (!simulationActive) return;
+    const interval = setInterval(() => {
+      const currentLocs = getUserLocations();
+      currentLocs.forEach(loc => {
+        // Only simulate movement for the default seeded locations
+        if (loc.id.startsWith("loc-") || loc.user.includes("Anonim") || loc.user.includes("Bripka")) {
+          // Smooth random walk algorithm
+          const latStep = (Math.random() - 0.4) * 0.0006; 
+          const lngStep = (Math.random() - 0.6) * 0.0008; // Bias direction slightly
+          trackLocation(loc.user, loc.role, loc.lat + latStep, loc.lng + lngStep, loc.action);
+        }
+      });
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [simulationActive]);
 
   // Convert lat/lng to percentage positions matching the OSM bounding box
   const getPosition = (lat: number, lng: number) => {
@@ -44,11 +62,11 @@ export default function AdminTracking() {
   };
 
   return (
-    <div className="flex flex-col min-h-full pb-10 bg-[#050505] text-white">
+    <div className="flex flex-col min-h-full pb-10 bg-[#02050A] text-white">
       {/* Background Grid */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-        <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/50 to-[#050505]" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+        <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(16,185,129,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#02050A]/80 to-[#02050A]" />
       </div>
 
       <header
@@ -62,12 +80,17 @@ export default function AdminTracking() {
         </Link>
         <div className="text-center">
           <p className="eyebrow text-emerald-500/80 tracking-widest"><LiveText as="span" id="admin-track-label" defaultText="LIVE TRACKING" /></p>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] mt-0.5 text-white">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] mt-0.5 text-white flex items-center justify-center gap-1">
             <LiveText as="span" id="admin-track-title" defaultText="Radar Operasional" />
+            {simulationActive && <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping ml-1" />}
           </p>
         </div>
-        <button onClick={fetchLocations} className={`w-11 h-11 surface-glass rounded-2xl flex items-center justify-center text-primary hover:bg-primary/20 transition-all ${refreshing ? "animate-spin text-emerald-400" : ""}`}>
-          <RefreshCw className="w-5 h-5" />
+        <button 
+          onClick={() => setSimulationActive(!simulationActive)} 
+          className={`w-11 h-11 surface-glass rounded-2xl flex items-center justify-center transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:scale-105 ${simulationActive ? "text-emerald-400 bg-emerald-500/20 border border-emerald-500/50" : "text-primary hover:bg-primary/20"}`}
+          title="Toggle Simulasi Bergerak"
+        >
+          {simulationActive ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
         </button>
       </header>
 
@@ -92,12 +115,12 @@ export default function AdminTracking() {
         </div>
 
         {/* Map Container */}
-        <div className="relative w-full aspect-square rounded-[2.5rem] surface-glass border border-white/10 overflow-hidden bg-[#0A0F14] shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+        <div className="relative w-full aspect-square rounded-[2.5rem] surface-glass border border-emerald-500/20 overflow-hidden bg-[#02050A] shadow-[0_0_80px_rgba(16,185,129,0.15)] group">
           {/* Real Map Background of Makassar */}
           <iframe 
             src="https://www.openstreetmap.org/export/embed.html?bbox=119.35,-5.20,119.50,-5.10&layer=mapnik" 
-            className="absolute inset-0 w-full h-full pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-1000"
-            style={{ filter: 'invert(1) hue-rotate(180deg) saturate(2) brightness(0.8) contrast(1.2)' }}
+            className="absolute inset-0 w-full h-full pointer-events-none opacity-60 mix-blend-screen transition-opacity duration-1000 scale-[1.05]"
+            style={{ filter: 'invert(1) hue-rotate(160deg) saturate(3) brightness(0.9) contrast(1.5)' }}
             title="Makassar Tactical Map"
           />
 

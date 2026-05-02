@@ -27,21 +27,60 @@ export default function AdminTracking() {
     return () => clearInterval(interval);
   }, []);
 
-  // Moving Simulation Logic
+  // Real-time Driving Simulation Logic
+  const velocitiesRef = useRef<Record<string, { lat: number, lng: number }>>({});
+
   useEffect(() => {
     if (!simulationActive) return;
+
+    // The 3 targets we want to simulate driving continuously
+    const drivingTargets = ["Tim Alpha (Resmob)", "Tim Bravo (Jatanras)", "Aipda Rahmat"];
+
+    // Initialize random initial driving directions (velocities)
+    drivingTargets.forEach(target => {
+      if (!velocitiesRef.current[target]) {
+        velocitiesRef.current[target] = {
+          lat: (Math.random() > 0.5 ? 1 : -1) * (0.0003 + Math.random() * 0.0004),
+          lng: (Math.random() > 0.5 ? 1 : -1) * (0.0003 + Math.random() * 0.0004)
+        };
+      }
+    });
+
     const interval = setInterval(() => {
       const currentLocs = getUserLocations();
       currentLocs.forEach(loc => {
-        // Only simulate movement for the default seeded locations
-        if (loc.id.startsWith("loc-") || loc.user.includes("Anonim") || loc.user.includes("Bripka")) {
-          // Smooth random walk algorithm
-          const latStep = (Math.random() - 0.4) * 0.0006; 
-          const lngStep = (Math.random() - 0.6) * 0.0008; // Bias direction slightly
-          trackLocation(loc.user, loc.role, loc.lat + latStep, loc.lng + lngStep, loc.action);
+        if (drivingTargets.includes(loc.user)) {
+          // Driving Vehicles
+          let v = velocitiesRef.current[loc.user];
+          
+          // 15% chance to "turn" at an intersection (change direction)
+          if (Math.random() < 0.15) {
+            v = {
+              lat: (Math.random() > 0.5 ? 1 : -1) * (0.0003 + Math.random() * 0.0004),
+              lng: (Math.random() > 0.5 ? 1 : -1) * (0.0003 + Math.random() * 0.0004)
+            };
+            velocitiesRef.current[loc.user] = v;
+          }
+
+          let newLat = loc.lat + v.lat;
+          let newLng = loc.lng + v.lng;
+
+          // Bounce off the Makassar expanded bounding box to keep them on map
+          if (newLat > -5.00 || newLat < -5.30) { v.lat *= -1; newLat = loc.lat + v.lat; }
+          if (newLng > 119.65 || newLng < 119.20) { v.lng *= -1; newLng = loc.lng + v.lng; }
+
+          // Generate dynamic speed based on velocity magnitude
+          const speed = Math.floor(Math.sqrt(v.lat*v.lat + v.lng*v.lng) * 100000) + " km/h";
+
+          trackLocation(loc.user, loc.role, newLat, newLng, "Patroli Bergerak Aktif", loc.area, speed, loc.device);
+        } else if (loc.id.startsWith("loc-")) {
+          // Idle Users (Citizens / Standing still)
+          const latStep = (Math.random() - 0.5) * 0.00005; // tiny jitter (GPS inaccuracy)
+          const lngStep = (Math.random() - 0.5) * 0.00005;
+          trackLocation(loc.user, loc.role, loc.lat + latStep, loc.lng + lngStep, loc.action, loc.area, loc.speed, loc.device);
         }
       });
-    }, 2000);
+    }, 2000); // Drives every 2 seconds
     return () => clearInterval(interval);
   }, [simulationActive]);
 

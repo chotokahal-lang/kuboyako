@@ -47,18 +47,18 @@ export default function AdminTracking() {
 
   // Convert lat/lng to percentage positions matching the OSM bounding box
   const getPosition = (lat: number, lng: number) => {
-    // OSM Bounding Box for Makassar
-    const minLng = 119.35;
-    const maxLng = 119.50;
-    const minLat = -5.20;
-    const maxLat = -5.10;
+    // EXPANDED OSM Bounding Box for Full Makassar Region
+    const minLng = 119.20;
+    const maxLng = 119.65;
+    const minLat = -5.30;
+    const maxLat = -5.00;
     
     const x = ((lng - minLng) / (maxLng - minLng)) * 100;
     const y = ((maxLat - lat) / (maxLat - minLat)) * 100; // Invert because web Y goes down
     
     return {
-      left: `${Math.max(2, Math.min(98, x))}%`,
-      top: `${Math.max(2, Math.min(98, y))}%`
+      left: `${Math.max(1, Math.min(99, x))}%`,
+      top: `${Math.max(1, Math.min(99, y))}%`
     };
   };
 
@@ -122,13 +122,13 @@ export default function AdminTracking() {
           <motion.div 
             drag
             dragConstraints={mapRef}
-            dragElastic={0.1}
+            dragElastic={0.05}
             whileDrag={{ scale: 1.01 }}
-            className="absolute inset-0 w-[200%] h-[200%] left-[-50%] top-[-50%] cursor-grab active:cursor-grabbing"
+            className="absolute inset-0 w-[300%] h-[300%] left-[-100%] top-[-100%] cursor-grab active:cursor-grabbing"
           >
             {/* Real Map Background of Makassar */}
             <iframe 
-              src="https://www.openstreetmap.org/export/embed.html?bbox=119.35,-5.20,119.50,-5.10&layer=mapnik" 
+              src="https://www.openstreetmap.org/export/embed.html?bbox=119.20,-5.30,119.65,-5.00&layer=mapnik" 
               className="absolute inset-0 w-full h-full pointer-events-none opacity-60 mix-blend-screen transition-opacity duration-1000"
               style={{ filter: 'invert(1) hue-rotate(160deg) saturate(3) brightness(0.9) contrast(1.5)' }}
               title="Makassar Tactical Map"

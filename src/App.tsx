@@ -5,43 +5,56 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MobileFrame } from "@/components/layout/mobile-frame";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SkipForward } from "lucide-react";
+import { SkipForward, Loader2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import Splash from "@/pages/splash";
-import RoleSelect from "@/pages/role-select";
-import Login from "@/pages/login";
-import AdminDashboard from "@/pages/admin-dashboard";
-import AdminInput from "@/pages/admin-input";
-import AdminScan from "@/pages/admin-scan";
-import AdminRiwayat from "@/pages/admin-riwayat";
-import AdminDetail from "@/pages/admin-detail";
-import AdminAccounts from "@/pages/admin-accounts";
-import AdminLogs from "@/pages/admin-logs";
-import AdminTracking from "@/pages/admin-tracking";
-import UserDashboard from "@/pages/user-dashboard";
-import UserCek from "@/pages/user-cek";
-import UserHasil from "@/pages/user-hasil";
-import UserLapor from "@/pages/user-lapor";
-import UserDaftar from "@/pages/user-daftar";
-import UserVerifikasiWajah from "@/pages/user-verifikasi-wajah";
-import Profile from "@/pages/profile";
-import Notifications from "@/pages/notifications";
-import HelpFaq from "@/pages/help-faq";
-import About from "@/pages/about";
-import NotFound from "@/pages/not-found";
-import Presentasi from "@/pages/presentasi";
-import TestimoniPage from "@/pages/testimoni";
-import AgentManager from "@/pages/agent-manager";
-import AgentAutoFixPage from "@/pages/agent-autofix";
-import FileManager from "@/pages/file-manager";
+
+// Lazy-loaded pages
+const Splash = lazy(() => import("@/pages/splash"));
+const RoleSelect = lazy(() => import("@/pages/role-select"));
+const Login = lazy(() => import("@/pages/login"));
+const AdminDashboard = lazy(() => import("@/pages/admin-dashboard"));
+const AdminInput = lazy(() => import("@/pages/admin-input"));
+const AdminScan = lazy(() => import("@/pages/admin-scan"));
+const AdminRiwayat = lazy(() => import("@/pages/admin-riwayat"));
+const AdminDetail = lazy(() => import("@/pages/admin-detail"));
+const AdminAccounts = lazy(() => import("@/pages/admin-accounts"));
+const AdminLogs = lazy(() => import("@/pages/admin-logs"));
+const AdminTracking = lazy(() => import("@/pages/admin-tracking"));
+const UserDashboard = lazy(() => import("@/pages/user-dashboard"));
+const UserCek = lazy(() => import("@/pages/user-cek"));
+const UserHasil = lazy(() => import("@/pages/user-hasil"));
+const UserLapor = lazy(() => import("@/pages/user-lapor"));
+const UserDaftar = lazy(() => import("@/pages/user-daftar"));
+const UserVerifikasiWajah = lazy(() => import("@/pages/user-verifikasi-wajah"));
+const Profile = lazy(() => import("@/pages/profile"));
+const Notifications = lazy(() => import("@/pages/notifications"));
+const HelpFaq = lazy(() => import("@/pages/help-faq"));
+const About = lazy(() => import("@/pages/about"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+const Presentasi = lazy(() => import("@/pages/presentasi"));
+const TestimoniPage = lazy(() => import("@/pages/testimoni"));
+const AgentManager = lazy(() => import("@/pages/agent-manager"));
+const AgentAutoFixPage = lazy(() => import("@/pages/agent-autofix"));
+const FileManager = lazy(() => import("@/pages/file-manager"));
+
 import { LiveEditToggle } from "@/components/ui/live-edit-toggle";
 import { LiveToolbar } from "@/components/ui/live-toolbar";
-import { LiveText } from "@/components/ui/live-text";
 import openingVideo from "@/assets/video.mp4";
 
 const queryClient = new QueryClient();
+
+// High-performance loading fallback
+const LoadingFallback = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-background text-primary">
+    <div className="relative">
+      <div className="absolute inset-0 bg-primary/20 blur-3xl animate-pulse rounded-full" />
+      <Loader2 className="w-12 h-12 animate-spin relative z-10" />
+    </div>
+    <p className="mt-4 eyebrow animate-pulse tracking-[0.3em]">OPTIMIZING SYSTEM...</p>
+  </div>
+);
 
 // Opening Video Component
 function OpeningVideo({ onComplete }: { onComplete: () => void }) {
@@ -209,51 +222,55 @@ function AppContent() {
         </>
       )}
       {showOpening && <OpeningVideo onComplete={handleVideoComplete} />}
-      <Routes>
-        {/* Full-screen pages (Bypass MobileFrame) */}
-        <Route path="/presentasi" element={<Presentasi />} />
-        <Route path="/testimoni" element={<TestimoniPage />} />
-        <Route path="/agent-manager" element={<AgentManager />} />
-        <Route path="/agent-autofix" element={<AgentAutoFixPage />} />
-        <Route path="/file-manager" element={<FileManager />} />
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          {/* Full-screen pages (Bypass MobileFrame) */}
+          <Route path="/presentasi" element={<Presentasi />} />
+          <Route path="/testimoni" element={<TestimoniPage />} />
+          <Route path="/agent-manager" element={<AgentManager />} />
+          <Route path="/agent-autofix" element={<AgentAutoFixPage />} />
+          <Route path="/file-manager" element={<FileManager />} />
 
-        {/* Mobile-framed pages */}
-        <Route
-          path="*"
-          element={
-            <MobileFrame>
-              <Routes>
-                <Route path="/" element={<Splash />} />
-                <Route path="/role-select" element={<RoleSelect />} />
-                <Route path="/login/:type" element={<Login />} />
+          {/* Mobile-framed pages */}
+          <Route
+            path="*"
+            element={
+              <MobileFrame>
+                <Suspense fallback={<LoadingFallback />}>
+                  <Routes>
+                    <Route path="/" element={<Splash />} />
+                    <Route path="/role-select" element={<RoleSelect />} />
+                    <Route path="/login/:type" element={<Login />} />
 
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/input" element={<AdminInput />} />
-                <Route path="/admin/scan" element={<AdminScan />} />
-                <Route path="/admin/riwayat" element={<AdminRiwayat />} />
-                <Route path="/admin/detail/:id" element={<AdminDetail />} />
-                <Route path="/admin/accounts" element={<AdminAccounts />} />
-                <Route path="/admin/logs" element={<AdminLogs />} />
-                <Route path="/admin/tracking" element={<AdminTracking />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/input" element={<AdminInput />} />
+                    <Route path="/admin/scan" element={<AdminScan />} />
+                    <Route path="/admin/riwayat" element={<AdminRiwayat />} />
+                    <Route path="/admin/detail/:id" element={<AdminDetail />} />
+                    <Route path="/admin/accounts" element={<AdminAccounts />} />
+                    <Route path="/admin/logs" element={<AdminLogs />} />
+                    <Route path="/admin/tracking" element={<AdminTracking />} />
 
-                <Route path="/user" element={<UserDashboard />} />
-                <Route path="/user/cek/:type" element={<UserCek />} />
-                <Route path="/user/hasil/:type/:query" element={<UserHasil />} />
-                <Route path="/user/lapor" element={<UserLapor />} />
-                <Route path="/user/daftar" element={<UserDaftar />} />
-                <Route path="/user/verifikasi-wajah" element={<UserVerifikasiWajah />} />
+                    <Route path="/user" element={<UserDashboard />} />
+                    <Route path="/user/cek/:type" element={<UserCek />} />
+                    <Route path="/user/hasil/:type/:query" element={<UserHasil />} />
+                    <Route path="/user/lapor" element={<UserLapor />} />
+                    <Route path="/user/daftar" element={<UserDaftar />} />
+                    <Route path="/user/verifikasi-wajah" element={<UserVerifikasiWajah />} />
 
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/help-faq" element={<HelpFaq />} />
-                <Route path="/about" element={<About />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/help-faq" element={<HelpFaq />} />
+                    <Route path="/about" element={<About />} />
 
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </MobileFrame>
-          }
-        />
-      </Routes>
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </MobileFrame>
+            }
+          />
+        </Routes>
+      </Suspense>
       <LiveEditToggle />
       <LiveToolbar />
     </>

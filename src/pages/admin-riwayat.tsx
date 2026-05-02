@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { Search, Filter, ChevronRight, Trash2, Download, Edit2, Save, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -97,12 +98,20 @@ export default function AdminRiwayat() {
         ? { imei1: formData.get("imei1") as string }
         : { noPolisi: formData.get("noPolisi") as string })
     } as EvidenceItem;
-
     updateEvidenceItem(updatedItem);
     setData(data.map(it => it.id === updatedItem.id ? updatedItem : it));
     
     const adminNrp = localStorage.getItem("kuboyako_user_nrp") || "admin";
     addLog(adminNrp, "admin", "UPDATE_EVIDENCE", `Mengubah data BB: ${updatedItem.noLp}`);
+
+    if (updatedItem.status === 'selesai' && editingItem.status !== 'selesai') {
+      toast.success("KASUS SELESAI!", {
+        description: `Barang bukti ${updatedItem.noLp} telah berhasil dituntaskan.`,
+        duration: 5000,
+      });
+    } else {
+      toast.success("Data berhasil diperbarui");
+    }
     
     setEditingItem(null);
   };

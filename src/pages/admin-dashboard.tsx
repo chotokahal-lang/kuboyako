@@ -21,6 +21,7 @@ export default function AdminDashboard() {
       mobil: data.filter((d) => d.type === "mobil").length,
       motor: data.filter((d) => d.type === "motor").length,
       hp: data.filter((d) => d.type === "hp").length,
+      selesai: data.filter((d) => d.status === "selesai").length,
     });
     setUnread(getUnreadCount("admin"));
   }, []);
@@ -139,8 +140,14 @@ export default function AdminDashboard() {
 
       {/* Visual Analytics */}
       <section className="px-6 mb-8 relative z-10">
-        <div className="flex justify-between items-center mb-4 px-1">
-          <h2 className="eyebrow"><LiveText as="span" id="admin-section-stats" defaultText="Analitik Tren BB" /></h2>
+        <div className="surface-elevated rounded-[2.5rem] p-6 border border-white/5 shadow-2xl mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="eyebrow"><LiveText as="span" id="admin-chart-title" defaultText="Statistik Barang Bukti" /></h2>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">{stats.selesai} Kasus Selesai</span>
+            </div>
+          </div>
           <span className="text-[10px] text-muted-foreground/60">Live Data</span>
         </div>
         
@@ -198,16 +205,21 @@ export default function AdminDashboard() {
                 whileTap={{ scale: 0.98 }}
                 className="surface-elevated rounded-2xl p-4 flex items-center gap-4 group cursor-pointer"
               >
-                <Icon3D src={a.icon} alt={a.title} size="md" tone={i === 1 ? "accent" : "primary"} />
-                <div className={`flex-1 min-w-0 ${a.isEpic ? "text-primary-foreground" : ""}`}>
+                <Icon3D src={a.icon} alt={a.title} size="md" tone={i === 2 ? "primary" : "accent"} />
+                <div className="flex-1 min-w-0">
                   <h3 className={`display-font text-base leading-tight ${a.isEpic ? "text-primary" : "text-foreground"}`}>
-                    <LiveText as="span" id={`action-title-${i}`} defaultText={a.title} />
+                    <LiveText id={`action-title-${i}`} defaultText={a.title} />
                   </h3>
                   <p className={`text-xs mt-0.5 truncate ${a.isEpic ? "text-primary/70" : "text-muted-foreground"}`}>
-                    <LiveText as="span" id={`action-desc-${i}`} defaultText={a.desc} />
+                    <LiveText id={`action-desc-${i}`} defaultText={a.desc} />
                   </p>
                 </div>
-                {a.isEpic && <Star className="w-4 h-4 text-primary fill-primary animate-pulse" />}
+                {a.isEpic && (
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 border border-primary/20">
+                    <Star className="w-3 h-3 text-primary fill-primary animate-pulse" />
+                    <span className="text-[8px] font-black text-primary uppercase tracking-tighter">Epic</span>
+                  </div>
+                )}
                 <span className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${a.isEpic ? "bg-primary/20 text-primary" : "surface-glass text-foreground/60 group-hover:text-primary"}`}>
                   <ChevronRight className="w-4 h-4" />
                 </span>
@@ -215,6 +227,40 @@ export default function AdminDashboard() {
             </Link>
           </motion.div>
         ))}
+      </section>
+
+      {/* RECENT CASE SUCCESS FEED - New Section */}
+      <section className="px-6 mt-8 relative z-10">
+        <div className="flex justify-between items-center mb-4 px-1">
+          <h2 className="eyebrow"><LiveText id="admin-section-success" defaultText="Kasus Berhasil Diungkap" /></h2>
+          <span className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest animate-pulse">Selesai</span>
+        </div>
+        
+        <div className="space-y-3">
+          {getEvidenceData().filter(it => it.status === 'selesai').slice(0, 2).map((it, i) => (
+            <motion.div 
+              key={it.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 + (i * 0.1) }}
+              className="surface-glass border border-emerald-500/20 rounded-2xl p-4 flex items-center gap-4"
+            >
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{it.noLp.split('/')[0]}/{it.noLp.split('/')[1]}</p>
+                <h4 className="text-sm font-bold text-foreground truncate">{it.merk} {(it as any).noPolisi || (it as any).imei1}</h4>
+                <p className="text-[10px] text-muted-foreground truncate italic">"{it.statusNote || "Berhasil dikembalikan."}"</p>
+              </div>
+            </motion.div>
+          ))}
+          {getEvidenceData().filter(it => it.status === 'selesai').length === 0 && (
+            <div className="surface rounded-2xl p-8 border border-dashed border-white/10 text-center">
+              <p className="text-xs text-muted-foreground italic">Belum ada kasus yang ditandai selesai.</p>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Status footer */}

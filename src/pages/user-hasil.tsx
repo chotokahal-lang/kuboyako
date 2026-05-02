@@ -138,176 +138,106 @@ export default function UserHasil() {
               </p>
             </motion.div>
           ) : (
-            /* ── TERDETEKSI BARANG BUKTI ─────────────────── */
             <motion.div
               key="danger"
               initial={{ scale: 1.05, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="w-full max-w-sm surface-elevated rounded-3xl overflow-hidden"
+              className="w-full max-w-md surface-elevated rounded-[2.5rem] overflow-hidden border border-destructive/20 shadow-[0_0_80px_rgba(239,68,68,0.1)]"
             >
-              {/* Header merah */}
               <div className="bg-destructive/10 p-8 text-center border-b border-white/5 relative">
                 <div className="absolute inset-0 bg-destructive/5 blur-3xl pointer-events-none" />
                 <div className="w-20 h-20 rounded-3xl border border-destructive/30 bg-destructive/15 flex items-center justify-center mx-auto mb-5 relative animate-pulse-glow">
                   <AlertTriangle className="w-10 h-10 text-destructive" />
                 </div>
-                <h1 className="display-font text-2xl text-foreground"><LiveText as="span" id="hasil-danger-title" defaultText="Terdeteksi!" /></h1>
-                <p className="eyebrow text-destructive mt-1"><LiveText as="span" id="hasil-danger-subtitle" defaultText="Tercatat sebagai Barang Bukti" /></p>
-                <p className="text-[9px] text-muted-foreground/60 mt-3 font-mono">
-                  Waktu verifikasi: {new Date().toLocaleString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} WITA
-                </p>
+                <h1 className="display-font text-3xl text-foreground"><LiveText id="hasil-danger-title" defaultText="TERDETEKSI!" /></h1>
+                <p className="eyebrow text-destructive mt-1 tracking-[0.2em]"><LiveText id="hasil-danger-subtitle" defaultText="BARANG BUKTI KEJAHATAN" /></p>
               </div>
 
-              {/* Identitas unit */}
-              <div className="p-6 space-y-5">
-                <div className="surface rounded-2xl p-4 flex items-center gap-4">
-                  <Icon3D
-                    src={
-                      result!.type === "hp"
-                        ? icons3d.phone
-                        : result!.type === "mobil"
-                        ? icons3d.car
-                        : icons3d.motor
-                    }
-                    alt={result!.type}
-                    size="md"
-                    tone="primary"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="eyebrow text-destructive/80 mb-1"><LiveText as="span" id="hasil-unit-label" defaultText="Identitas Unit" /></p>
-                    <p className="text-base font-bold text-foreground tracking-tight uppercase truncate">
+              <div className="p-8 space-y-6">
+                <div className="surface-glass rounded-3xl p-5 border border-white/5 flex items-center gap-5">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
+                    <Icon3D
+                      src={
+                        result!.type === "hp"
+                          ? icons3d.phone
+                          : result!.type === "mobil"
+                          ? icons3d.car
+                          : icons3d.motor
+                      }
+                      alt={result!.type}
+                      size="lg"
+                      tone="primary"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Identitas Unit</p>
+                    <h2 className="text-xl font-bold text-foreground tracking-tight uppercase truncate">
                       {result!.type === "hp" ? result!.imei1 : (result as any).noPolisi}
+                    </h2>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {result!.merk} {(result as any).tipe || (result as any).jenis || (result as any).model} · {result!.warna}
                     </p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {result!.merk}{" "}
-                      {(result as any).tipe || (result as any).jenis || (result as any).model}
-                      {" · "}{result!.warna}
-                    </p>
-                    {result!.type !== "hp" && (
-                      <div className="mt-2 pt-2 border-t border-white/5 flex flex-col gap-1">
-                        <p className="text-[10px] text-muted-foreground">
-                          No. Mesin: <span className="text-foreground font-mono">{(result as any).noMesin}</span>
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">
-                          No. Rangka: <span className="text-foreground font-mono">{(result as any).noRangka}</span>
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">
-                          Tahun: <span className="text-foreground font-mono">{(result as any).tahun}</span>
-                        </p>
-                      </div>
-                    )}
-                    {result!.type === "hp" && (result as any).imei2 && (
-                      <p className="text-[10px] text-muted-foreground mt-1">
-                        IMEI 2: <span className="text-foreground font-mono">{(result as any).imei2}</span>
-                      </p>
-                    )}
                   </div>
                 </div>
 
-                {/* Info Pelapor — tampil untuk semua */}
-                <div className="surface rounded-2xl p-4">
-                  <p className="eyebrow mb-2">Data Pelapor</p>
-                  <p className="text-sm font-bold text-foreground uppercase">{result!.pelapor}</p>
-                  <p className="text-[10px] text-muted-foreground mt-1">Tanggal Lapor: {new Date(result!.tglLp).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                </div>
-
-                {/* Detail LP — hanya untuk Polri & Admin */}
-                {!isUmum && (
-                  <div className="space-y-3">
-                    {[
-                      { icon: <FileText className="w-4 h-4" />, label: "Nomor LP", val: result!.noLp },
-                      { icon: <FileText className="w-4 h-4" />, label: "Satuan Penerbit", val: result!.satker },
-                      {
-                        icon: <Calendar className="w-4 h-4" />,
-                        label: "Tanggal Laporan",
-                        val: new Date(result!.tglLp).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        }),
-                      },
-                      { icon: <MapPin className="w-4 h-4" />, label: "Lokasi TKP", val: result!.lokasiTkp },
-                      { icon: <ShieldAlert className="w-4 h-4" />, label: "Asal LP (Kesatuan)", val: result!.asalLp },
-                    ].map((it, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <span className="w-9 h-9 rounded-xl surface-glass flex items-center justify-center text-foreground/70 shrink-0">
-                          {it.icon}
-                        </span>
-                        <div className="flex-1 min-w-0 border-b border-white/5 pb-3">
-                          <p className="eyebrow mb-0.5">{it.label}</p>
-                          <p className="text-sm font-medium text-foreground uppercase truncate">
-                            {it.val}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Status Kasus */}
-                <div className={`rounded-2xl p-4 border ${
+                <div className={`rounded-3xl border p-6 relative overflow-hidden ${
                   result!.status === 'selesai' ? 'bg-emerald-500/10 border-emerald-500/30' :
                   result!.status === 'proses' ? 'bg-orange-500/10 border-orange-500/30' :
                   'bg-blue-500/10 border-blue-500/30'
                 }`}>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black ${
-                      result!.status === 'selesai' ? 'bg-emerald-500/20 text-emerald-400' :
-                      result!.status === 'proses' ? 'bg-orange-500/20 text-orange-400' :
-                      'bg-blue-500/20 text-blue-400'
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-3 h-3 rounded-full animate-ping ${
+                      result!.status === 'selesai' ? 'bg-emerald-500' : 
+                      result!.status === 'proses' ? 'bg-orange-500' : 'bg-blue-500'
+                    }`} />
+                    <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${
+                      result!.status === 'selesai' ? 'text-emerald-400' : 
+                      result!.status === 'proses' ? 'text-orange-400' : 'text-blue-400'
                     }`}>
-                      {result!.status === 'selesai' ? '✓' : result!.status === 'proses' ? '◎' : '●'}
+                      {result!.status === 'selesai' ? 'Status: Kasus Selesai' : 
+                       result!.status === 'proses' ? 'Status: Penyidikan Aktif' : 'Status: Laporan Baru'}
                     </span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-foreground mb-2">
+                    {result!.status === 'selesai' ? 'Barang Berhasil Ditemukan' : 'Unit Dalam Pencarian Polisi'}
+                  </h3>
+                  
+                  <p className="text-sm text-muted-foreground leading-relaxed italic">
+                    "{result!.statusNote || "Petugas sedang melakukan pendalaman data dan koordinasi di lapangan."}"
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="flex justify-between items-center py-3 border-b border-white/5">
+                    <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">Nomor LP</span>
+                    <span className="text-xs font-mono font-bold text-foreground">{result!.noLp}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-white/5">
+                    <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">Pelapor</span>
+                    <span className="text-xs font-bold text-foreground uppercase">{result!.pelapor}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-4 pt-4">
+                  <div className="p-4 rounded-2xl bg-destructive/5 border border-destructive/20 flex gap-4 items-start">
+                    <ShieldAlert className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
                     <div>
-                      <p className="eyebrow mb-0.5">Status Kasus</p>
-                      <p className={`text-sm font-black uppercase ${
-                        result!.status === 'selesai' ? 'text-emerald-400' :
-                        result!.status === 'proses' ? 'text-orange-400' :
-                        'text-blue-400'
-                      }`}>
-                        {result!.status === 'selesai' ? 'Kasus Selesai' : result!.status === 'proses' ? 'Sedang Diproses' : 'Laporan Baru'}
+                      <p className="text-[10px] font-black text-destructive uppercase tracking-widest mb-1">Peringatan Keras</p>
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">
+                        Unit ini tercatat dalam sistem kriminalitas. Melakukan transaksi pada unit ini dapat dikategorikan sebagai <b className="text-foreground">Tindak Pidana Penadahan (Pasal 480 KUHP)</b>.
                       </p>
                     </div>
                   </div>
-                  {result!.statusNote && (
-                    <p className="text-[11px] text-muted-foreground leading-relaxed mt-2 pl-11 italic">
-                      {result!.statusNote}
-                    </p>
-                  )}
-                </div>
 
-                {/* Tombol Lapor — khusus Umum */}
-                {isUmum && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="space-y-2"
+                  <a 
+                    href="tel:110"
+                    className="w-full flex items-center justify-center gap-3 py-5 rounded-[1.5rem] bg-destructive text-white font-black uppercase tracking-[0.2em] text-xs hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_20px_40px_rgba(239,68,68,0.25)]"
                   >
-                    <p className="eyebrow text-center text-[10px] text-muted-foreground/70 mb-1">
-                      Jangan dibeli atau digunakan!
-                    </p>
-                    <button
-                      onClick={() => navigate("/user/lapor")}
-                      className="w-full h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 font-bold flex items-center justify-center gap-2 text-sm"
-                    >
-                      <Phone className="w-4 h-4" />
-                      Laporkan ke Kepolisian
-                    </button>
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Footer peringatan */}
-              <div className="bg-destructive/10 p-5 flex gap-3 border-t border-white/5">
-                <span className="w-10 h-10 rounded-xl bg-destructive/20 border border-destructive/30 flex items-center justify-center shrink-0">
-                  <ShieldAlert className="w-5 h-5 text-destructive" />
-                </span>
-                <p className="text-xs text-destructive/90 leading-relaxed font-medium">
-                  {isUmum
-                    ? <LiveText as="span" id="hasil-footer-warn-umum" defaultText="Segera hubungi RESMOB POLDA SULSEL atau Polsek terdekat. Jangan membeli, menjual, atau menggunakan unit ini." />
-                    : <LiveText as="span" id="hasil-footer-warn-polri" defaultText="Unit ini terdaftar sebagai barang bukti. Tindak lanjuti sesuai prosedur RESMOB POLDA SULSEL." />}
-                </p>
+                    <Phone className="w-4 h-4 animate-bounce" /> Hubungi Call Center 110
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}

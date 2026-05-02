@@ -175,7 +175,7 @@ export default function About() {
           <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-primary fill-primary" />
-              <p className="eyebrow text-[10px]"><LiveText id="about-rev-title-main" defaultText="Ulasan Tentang Aplikasi" /></p>
+              <p className="eyebrow text-[10px]"><LiveText id="about-real-rev-title-main" defaultText="Ulasan Tentang Aplikasi" /></p>
             </div>
             <div className="flex gap-0.5">
                {[...Array(5)].map((_, i) => <Star key={i} className="w-2 h-2 fill-primary text-primary" />)}
@@ -183,16 +183,16 @@ export default function About() {
           </div>
           <div className="px-4 py-5 space-y-4">
              <div className="space-y-1">
-                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-tag-1" defaultText="Testimoni Lapangan" /></p>
+                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-real-rev-tag-1" defaultText="Testimoni Lapangan" /></p>
                 <p className="text-[11px] text-foreground font-bold leading-relaxed italic">
-                  <LiveText id="about-rev-content-1" defaultText="\"Sangat membantu tugas lapangan. Data barang bukti jadi rapi dan gampang dicari. Gak perlu ribet buka buku besar lagi. Efisiensi kerja naik drastis!\"" />
+                  <LiveText id="about-real-rev-content-1" defaultText="\"Sangat membantu tugas lapangan. Data barang bukti jadi rapi dan gampang dicari. Gak perlu ribet buka buku besar lagi. Efisiensi kerja naik drastis!\"" />
                 </p>
                 <p className="text-[9px] text-muted-foreground">— Anggota Opsnal Resmob</p>
              </div>
              <div className="space-y-1">
-                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-rev-tag-2" defaultText="Kesan Pengguna" /></p>
+                <p className="text-[10px] font-black text-primary uppercase tracking-widest"><LiveText id="about-real-rev-tag-2" defaultText="Kesan Pengguna" /></p>
                 <p className="text-[11px] text-foreground font-bold leading-relaxed italic">
-                  <LiveText id="about-rev-content-2" defaultText="\"Tampilannya gila sih, keren banget! Pak Bos juga senang liatnya pas presentasi. Bangga punya sistem se-canggih ini di Polda Sulsel.\"" />
+                  <LiveText id="about-real-rev-content-2" defaultText="\"Tampilannya gila sih, keren banget! Pak Bos juga senang liatnya pas presentasi. Bangga punya sistem se-canggih ini di Polda Sulsel.\"" />
                 </p>
                 <p className="text-[9px] text-muted-foreground">— Operator Data Ditkrimum</p>
              </div>

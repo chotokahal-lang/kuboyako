@@ -102,15 +102,15 @@ export default function TestimoniPage() {
                     </div>
                     
                     <h2 className="text-xl md:text-3xl font-bold text-foreground mb-4 leading-relaxed">
-                      <LiveText id={`testi-hero-content-${activeIndex}`} defaultText={`"${testimonials[activeIndex].content}"`} />
+                      <LiveText id={`testi-real-hero-content-${activeIndex}`} defaultText={`"${testimonials[activeIndex].content}"`} />
                     </h2>
                     
                     <div>
                       <h3 className="text-lg font-black text-primary uppercase tracking-wider">
-                        <LiveText id={`testi-hero-name-${activeIndex}`} defaultText={testimonials[activeIndex].name} />
+                        <LiveText id={`testi-real-hero-name-${activeIndex}`} defaultText={testimonials[activeIndex].name} />
                       </h3>
                       <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1">
-                        <LiveText id={`testi-hero-role-${activeIndex}`} defaultText={testimonials[activeIndex].role} />
+                        <LiveText id={`testi-real-hero-role-${activeIndex}`} defaultText={testimonials[activeIndex].role} />
                       </p>
                     </div>
                   </div>
@@ -149,7 +149,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-8xl font-black mb-8 tracking-tight leading-tight"
           >
-            <LiveText id="testi-page-title-1" defaultText="Ulasan Tentang" /> <span className="text-gradient"><LiveText id="testi-page-title-2" defaultText="Aplikasi KUBOYAKO" /></span>
+            <LiveText id="testi-real-page-title-1" defaultText="Ulasan Tentang" /> <span className="text-gradient"><LiveText id="testi-real-page-title-2" defaultText="Aplikasi KUBOYAKO" /></span>
           </motion.h1>
           
           <motion.p
@@ -158,7 +158,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.2 }}
             className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
           >
-            <LiveText id="testi-page-desc" defaultText="Dengarkan langsung pengalaman nyata dari para petugas kepolisian di lapangan dan masyarakat yang telah merasakan manfaat kemudahan dari sistem KUBOYAKO." />
+            <LiveText id="testi-real-page-desc" defaultText="Dengarkan langsung pengalaman nyata dari para petugas kepolisian di lapangan dan masyarakat yang telah merasakan manfaat kemudahan dari sistem KUBOYAKO." />
           </motion.p>
         </div>
 
@@ -213,17 +213,17 @@ export default function TestimoniPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-base leading-tight">
-                      <LiveText id={`testi-grid-name-${i}`} defaultText={t.name} />
+                      <LiveText id={`testi-real-grid-name-${i}`} defaultText={t.name} />
                     </h3>
                     <p className="text-[10px] text-primary font-black uppercase tracking-widest mt-1">
-                      <LiveText id={`testi-grid-role-${i}`} defaultText={t.role} />
+                      <LiveText id={`testi-real-grid-role-${i}`} defaultText={t.role} />
                     </p>
                   </div>
                 </div>
 
                 <div className="relative">
                   <p className="text-base leading-relaxed text-foreground/90 italic">
-                    <LiveText id={`testi-grid-content-${i}`} defaultText={`"${t.content}"`} />
+                    <LiveText id={`testi-real-grid-content-${i}`} defaultText={`"${t.content}"`} />
                   </p>
                 </div>
 

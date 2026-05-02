@@ -182,21 +182,42 @@ export default function AdminTracking() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 text-xs">
+                {selectedUser.area && (
+                  <div className="bg-white/5 p-3 rounded-xl col-span-2">
+                    <p className="text-white/50 mb-1 font-mono text-[9px]">LOKASI / AREA</p>
+                    <p className="font-bold text-emerald-400">{selectedUser.area}</p>
+                  </div>
+                )}
                 <div className="bg-white/5 p-3 rounded-xl">
                   <p className="text-white/50 mb-1 font-mono text-[9px]">LATITUDE</p>
-                  <p className="font-mono">{selectedUser.lat.toFixed(6)}</p>
+                  <p className="font-mono text-white/90">{selectedUser.lat.toFixed(6)}</p>
                 </div>
                 <div className="bg-white/5 p-3 rounded-xl">
                   <p className="text-white/50 mb-1 font-mono text-[9px]">LONGITUDE</p>
-                  <p className="font-mono">{selectedUser.lng.toFixed(6)}</p>
+                  <p className="font-mono text-white/90">{selectedUser.lng.toFixed(6)}</p>
                 </div>
+                {selectedUser.speed && (
+                  <div className="bg-white/5 p-3 rounded-xl">
+                    <p className="text-white/50 mb-1 font-mono text-[9px]">KECEPATAN</p>
+                    <p className="font-mono text-primary font-bold">{selectedUser.speed}</p>
+                  </div>
+                )}
+                {selectedUser.device && (
+                  <div className="bg-white/5 p-3 rounded-xl">
+                    <p className="text-white/50 mb-1 font-mono text-[9px]">PERANGKAT</p>
+                    <p className="font-mono">{selectedUser.device}</p>
+                  </div>
+                )}
                 <div className="bg-white/5 p-3 rounded-xl col-span-2">
                   <p className="text-white/50 mb-1 font-mono text-[9px]">AKSI TERAKHIR</p>
-                  <p>{selectedUser.action}</p>
+                  <p className="font-medium">{selectedUser.action}</p>
                 </div>
-                <div className="bg-white/5 p-3 rounded-xl col-span-2">
-                  <p className="text-white/50 mb-1 font-mono text-[9px]">WAKTU</p>
-                  <p>{new Date(selectedUser.timestamp).toLocaleString('id-ID')}</p>
+                <div className="bg-white/5 p-3 rounded-xl col-span-2 flex justify-between items-center">
+                  <div>
+                    <p className="text-white/50 mb-1 font-mono text-[9px]">PEMBARUAN TERAKHIR</p>
+                    <p>{new Date(selectedUser.timestamp).toLocaleString('id-ID')}</p>
+                  </div>
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                 </div>
               </div>
             </motion.div>

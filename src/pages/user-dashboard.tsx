@@ -29,12 +29,18 @@ export default function UserDashboard() {
     if ("geolocation" in navigator) {
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
+          const speed = position.coords.speed ? `${(position.coords.speed * 3.6).toFixed(1)} km/h` : "Mendeteksi...";
+          const deviceName = /Android/i.test(navigator.userAgent) ? "Android Device" : /iPhone/i.test(navigator.userAgent) ? "iPhone" : "Desktop/Web";
+          
           trackLocation(
             userNrp,
             role,
             position.coords.latitude,
             position.coords.longitude,
-            "Sedang Aktif (Berpindah)"
+            "Sedang Aktif (Berpindah)",
+            "Area Terdeteksi",
+            speed,
+            deviceName
           );
         },
         (error) => {

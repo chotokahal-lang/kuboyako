@@ -422,17 +422,23 @@ export interface UserLocation {
   lat: number;
   lng: number;
   action: string;
+  area?: string;
+  speed?: string;
+  device?: string;
 }
 
 const initialLocations: UserLocation[] = [
   {
     id: "loc-1",
     timestamp: Date.now() - 1000 * 60 * 2,
-    user: "Bripka Andi",
+    user: "Tim Alpha (Resmob)",
     role: "polri",
     lat: -5.147665,
     lng: 119.432731,
-    action: "Pencarian Mobil (DD 1234 AB)"
+    action: "Patroli Rutin - Pengejaran Target",
+    area: "Jl. AP Pettarani, Panakkukang",
+    speed: "45 km/h",
+    device: "MDT - Kendaraan Taktis"
   },
   {
     id: "loc-2",
@@ -441,7 +447,10 @@ const initialLocations: UserLocation[] = [
     role: "umum",
     lat: -5.130000,
     lng: 119.410000,
-    action: "Pencarian HP (IMEI: 358...)"
+    action: "Pencarian IMEI (Suspect HP Curian)",
+    area: "Pantai Losari / Jl. Penghibur",
+    speed: "0 km/h (Diam)",
+    device: "iPhone 13 Pro"
   },
   {
     id: "loc-3",
@@ -450,7 +459,10 @@ const initialLocations: UserLocation[] = [
     role: "polri",
     lat: -5.160000,
     lng: 119.450000,
-    action: "Verifikasi Unit Motor"
+    action: "Verifikasi Plat Nomor Palsu",
+    area: "BTP, Tamalanrea",
+    speed: "20 km/h",
+    device: "Motor Patroli"
   },
   {
     id: "loc-4",
@@ -459,7 +471,34 @@ const initialLocations: UserLocation[] = [
     role: "umum",
     lat: -5.155000,
     lng: 119.425000,
-    action: "Pencarian HP Tersuspect"
+    action: "Pengecekan Status Blokir Barang",
+    area: "MTC Karebosi",
+    speed: "0 km/h (Diam)",
+    device: "PC Desktop - Chrome"
+  },
+  {
+    id: "loc-5",
+    timestamp: Date.now() - 1000 * 60 * 5,
+    user: "Tim Bravo (Jatanras)",
+    role: "polri",
+    lat: -5.115000,
+    lng: 119.485000,
+    action: "Pengintaian Sindikat Ranmor",
+    area: "Jl. Perintis Kemerdekaan, Biringkanaya",
+    speed: "60 km/h",
+    device: "MDT - Kendaraan Taktis"
+  },
+  {
+    id: "loc-6",
+    timestamp: Date.now() - 1000 * 60 * 10,
+    user: "Anonim (Masyarakat)",
+    role: "umum",
+    lat: -5.185000,
+    lng: 119.435000,
+    action: "Melaporkan Motor Hilang (Beat)",
+    area: "Jl. Sultan Alauddin",
+    speed: "0 km/h (Diam)",
+    device: "Samsung Galaxy S23"
   }
 ];
 
@@ -476,7 +515,16 @@ export function getUserLocations(): UserLocation[] {
   return initialLocations;
 }
 
-export function trackLocation(user: string, role: string, lat: number, lng: number, action: string) {
+export function trackLocation(
+  user: string, 
+  role: string, 
+  lat: number, 
+  lng: number, 
+  action: string,
+  area?: string,
+  speed?: string,
+  device?: string
+) {
   const locations = getUserLocations();
   
   // Find if user already has an active location session (within the last 30 minutes)
@@ -490,6 +538,9 @@ export function trackLocation(user: string, role: string, lat: number, lng: numb
     locations[existingIndex].lng = lng;
     locations[existingIndex].action = action;
     locations[existingIndex].timestamp = Date.now();
+    if (area) locations[existingIndex].area = area;
+    if (speed) locations[existingIndex].speed = speed;
+    if (device) locations[existingIndex].device = device;
   } else {
     // Create new entry
     const newLoc: UserLocation = {
@@ -499,7 +550,10 @@ export function trackLocation(user: string, role: string, lat: number, lng: numb
       role,
       lat,
       lng,
-      action
+      action,
+      area,
+      speed,
+      device
     };
     locations.unshift(newLoc);
   }

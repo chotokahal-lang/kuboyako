@@ -149,7 +149,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-8xl font-black mb-8 tracking-tight leading-tight"
           >
-            <LiveText id="testi-real-page-title-1" defaultText="Ulasan Tentang" /> <span className="text-gradient"><LiveText id="testi-real-page-title-2" defaultText="Aplikasi KUBOYAKO" /></span>
+            <LiveText id="testi-real-page-title-1" defaultText="DAFTAR ULASAN" /> <span className="text-gradient"><LiveText id="testi-real-page-title-2" defaultText="PENGGUNA KUBOYAKO" /></span>
           </motion.h1>
           
           <motion.p
@@ -276,7 +276,7 @@ export default function TestimoniPage() {
       {/* Footer Branding */}
       <footer className="py-12 text-center">
          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.5em] font-bold">
-           KUBOYAKO 2030 — ULTIMATE EDITION
+           KUBOYAKO 2030 — ULTIMATE EDITION [VER-0405]
          </p>
       </footer>
     </div>

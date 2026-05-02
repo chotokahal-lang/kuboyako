@@ -7,6 +7,14 @@ const config: CapacitorConfig = {
   server: {
     url: 'https://www.kuboyako.com',
     cleartext: true
+  },
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: "#02050A",
+      showSpinner: true,
+      androidScaleType: "CENTER_CROP"
+    }
   }
 };
 

@@ -128,17 +128,17 @@ function OpeningVideo({ onComplete }: { onComplete: () => void }) {
           className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden"
         >
           {/* Video */}
-          <div className="relative w-full h-full md:w-[410px] md:h-[840px] md:aspect-[9/19.5] md:rounded-[3.5rem] overflow-hidden bg-black md:border-[10px] md:border-[#121212] phone-frame-desktop">
+          <div className="relative w-full h-full lg:w-[410px] lg:h-[840px] lg:aspect-[9/19.5] lg:rounded-[3.5rem] overflow-hidden bg-black lg:border-[10px] lg:border-[#121212] phone-frame-desktop">
             {/* Dynamic Island Mockup */}
-            <div className="hidden md:flex absolute top-4 left-1/2 -translate-x-1/2 w-32 h-8 dynamic-island rounded-full z-50 items-center justify-center">
+            <div className="hidden lg:flex absolute top-4 left-1/2 -translate-x-1/2 w-32 h-8 dynamic-island rounded-full z-50 items-center justify-center">
               <div className="w-1.5 h-1.5 bg-[#1a1a1a] rounded-full ml-auto mr-4 ring-1 ring-white/5 opacity-40" />
             </div>
 
             {/* Physical Button Mockups */}
-            <div className="hidden md:block absolute -left-[12px] top-32 w-[4px] h-12 bg-white/10 rounded-l-md ring-1 ring-white/5" />
-            <div className="hidden md:block absolute -left-[12px] top-48 w-[4px] h-20 bg-white/10 rounded-l-md ring-1 ring-white/5" />
-            <div className="hidden md:block absolute -left-[12px] top-72 w-[4px] h-20 bg-white/10 rounded-l-md ring-1 ring-white/5" />
-            <div className="hidden md:block absolute -right-[12px] top-48 w-[4px] h-24 bg-white/10 rounded-r-md ring-1 ring-white/5" />
+            <div className="hidden lg:block absolute -left-[12px] top-32 w-[4px] h-12 bg-white/10 rounded-l-md ring-1 ring-white/5" />
+            <div className="hidden lg:block absolute -left-[12px] top-48 w-[4px] h-20 bg-white/10 rounded-l-md ring-1 ring-white/5" />
+            <div className="hidden lg:block absolute -left-[12px] top-72 w-[4px] h-20 bg-white/10 rounded-l-md ring-1 ring-white/5" />
+            <div className="hidden lg:block absolute -right-[12px] top-48 w-[4px] h-24 bg-white/10 rounded-r-md ring-1 ring-white/5" />
 
             {/* Status Bar */}
             <div className="absolute top-0 left-0 right-0 h-10 flex items-center justify-between px-8 z-[60] text-[10px] font-bold text-white/80 pointer-events-none">

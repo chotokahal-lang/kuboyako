@@ -33,9 +33,10 @@ jobs:
       - name: Build Web Project
         run: npm run build
 
-      - name: Sync Capacitor
+      - name: Add and Sync Android Platform
         run: |
-          npx cap sync android || (npx cap add android && npx cap sync android)
+          npx cap add android
+          npx cap sync android
 
       - name: Build Android Project
         run: |

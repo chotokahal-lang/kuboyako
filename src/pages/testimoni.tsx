@@ -7,45 +7,45 @@ import { Logo3DImg } from "@/components/ui/logo-3d-img";
 
 const testimonials = [
   {
-    name: "Aiptu Rizal",
-    role: "Bagian Administrasi BB",
-    content: "Dulu cari berkas barang bukti makan waktu seharian di gudang, sekarang tinggal klik di HP. Kerja jadi lebih cerdas, bukan lebih keras. Semua data tersusun rapi dan akurat.",
-    avatar: "AR",
+    name: "Aiptu Muh. Rizal, S.H.",
+    role: "Ba Ur Barbuk Unit V Subdit Jatanras",
+    content: "Sebelum ada KUBOYAKO, kami harus buka catatan manual satu per satu di gudang barbuk. Sekarang cukup ketik nomor LP, semua data langsung keluar. Hemat waktu berjam-jam setiap hari.",
+    avatar: "MR",
     accent: "from-blue-600 to-indigo-700"
   },
   {
-    name: "Bripka Andi",
-    role: "Unit Reaksi Cepat (URC)",
-    content: "Sangat membantu kami saat razia di lapangan. Cukup masukkan plat atau IMEI, langsung tahu statusnya dalam hitungan detik. Gak ada lagi alasan buat pelaku buat mengelak.",
-    avatar: "BA",
+    name: "Bripka Andi Saputra",
+    role: "Anggota Opsnal Unit V Subdit Jatanras",
+    content: "Waktu operasi di lapangan, kami bisa langsung cek IMEI HP curian lewat aplikasi ini. Hasilnya instan, jadi tersangka tidak bisa mengelak lagi. Sangat membantu penyidikan.",
+    avatar: "AS",
     accent: "from-orange-500 to-red-600"
   },
   {
-    name: "Iptu Hasan",
-    role: "Panit Resmob Polda Sulsel",
-    content: "Inovasi yang pas buat zaman sekarang. Semua anggota sudah pakai dan sangat terbantu. KUBOYAKO bikin sistem di Polda makin rapi dan profesional di mata pimpinan.",
-    avatar: "IH",
+    name: "Iptu Hasan Basri, S.I.K.",
+    role: "Kanit V Subdit Jatanras Ditkrimum",
+    content: "Sebagai Kanit, saya butuh data yang cepat dan akurat untuk laporan ke pimpinan. KUBOYAKO mempermudah monitoring status barbuk di unit kami secara real-time.",
+    avatar: "HB",
     accent: "from-emerald-500 to-teal-700"
   },
   {
-    name: "Bapak Haji Syamsul",
-    role: "Tokoh Masyarakat",
-    content: "Warga juga sangat senang karena bisa lapor dan cek sendiri. Sangat transparan dan nggak pakai ribet. Ini yang kami harapkan dari kepolisian modern.",
-    avatar: "HS",
+    name: "H. Syamsul Bahri",
+    role: "Ketua RT 05 Kel. Rappocini, Makassar",
+    content: "Saya pernah kehilangan motor dan langsung lapor lewat aplikasi ini. Prosesnya mudah dan transparan. Warga di lingkungan kami jadi lebih percaya sama kepolisian.",
+    avatar: "SB",
     accent: "from-purple-500 to-pink-600"
   },
   {
-    name: "Sdr. Rudi",
-    role: "Warga Kota Makassar",
-    content: "Sebagai masyarakat, saya merasa jauh lebih aman kalau mau belanja HP bekas. Tinggal cek di KUBOYAKO dulu, kalau aman baru saya beli. Sangat bermanfaat!",
-    avatar: "SR",
+    name: "Muh. Ardiansyah",
+    role: "Mahasiswa, Warga Kota Makassar",
+    content: "Mau beli HP bekas di pasar, saya cek dulu IMEI-nya di KUBOYAKO. Ternyata statusnya bersih. Jadi saya beli dengan tenang tanpa takut tertipu barang curian.",
+    avatar: "MA",
     accent: "from-cyan-500 to-blue-600"
   },
   {
-    name: "Operator IT Polda",
-    role: "Manajemen Data DORS",
-    content: "Integrasi sistemnya sangat mantap. Gak ada lagi data yang hilang atau dobel. Memudahkan sinkronisasi data antar unit dengan sangat cepat dan aman.",
-    avatar: "IT",
+    name: "Brigpol Fadli Rahman",
+    role: "Operator DORS Ditkrimum Polda Sulsel",
+    content: "Sinkronisasi data antara KUBOYAKO dan sistem DORS berjalan lancar. Tidak ada lagi data ganda atau nomor LP yang tertukar. Administrasi jadi jauh lebih tertib.",
+    avatar: "FR",
     accent: "from-slate-600 to-slate-800"
   }
 ];
@@ -139,7 +139,7 @@ export default function TestimoniPage() {
             className="flex items-center justify-center gap-3 mb-6"
           >
             <div className="h-[1px] w-12 bg-primary/40" />
-            <span className="eyebrow text-primary text-sm">Kesaksian Nyata</span>
+            <span className="eyebrow text-primary text-sm">Ulasan Pengguna</span>
             <div className="h-[1px] w-12 bg-primary/40" />
           </motion.div>
           
@@ -149,7 +149,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-8xl font-black mb-8 tracking-tight leading-tight"
           >
-            <LiveText id="testi-real-page-title-1" defaultText="DAFTAR ULASAN" /> <span className="text-gradient"><LiveText id="testi-real-page-title-2" defaultText="PENGGUNA KUBOYAKO" /></span>
+            <LiveText id="testi-v3-page-title-1" defaultText="Ulasan Tentang" /> <span className="text-gradient"><LiveText id="testi-v3-page-title-2" defaultText="Aplikasi KUBOYAKO" /></span>
           </motion.h1>
           
           <motion.p
@@ -158,7 +158,7 @@ export default function TestimoniPage() {
             transition={{ delay: 0.2 }}
             className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
           >
-            <LiveText id="testi-real-page-desc" defaultText="Dengarkan langsung pengalaman nyata dari para petugas kepolisian di lapangan dan masyarakat yang telah merasakan manfaat kemudahan dari sistem KUBOYAKO." />
+            <LiveText id="testi-v3-page-desc" defaultText="Pengalaman langsung dari anggota Polri di jajaran Ditkrimum Polda Sulsel dan masyarakat Kota Makassar yang telah menggunakan sistem KUBOYAKO." />
           </motion.p>
         </div>
 
@@ -172,22 +172,22 @@ export default function TestimoniPage() {
           <div className="surface-elevated rounded-3xl p-6 text-center border border-white/5">
             <ShieldCheck className="w-8 h-8 text-primary mx-auto mb-3" />
             <div className="text-2xl font-bold">100%</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Aman & Terenkripsi</div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Data Terenkripsi</div>
           </div>
           <div className="surface-elevated rounded-3xl p-6 text-center border border-white/5">
             <Zap className="w-8 h-8 text-orange-400 mx-auto mb-3" />
-            <div className="text-2xl font-bold">Ultra</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Respon Real-time</div>
+            <div className="text-2xl font-bold">Instan</div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Pencarian Cepat</div>
           </div>
           <div className="surface-elevated rounded-3xl p-6 text-center border border-white/5">
             <Globe className="w-8 h-8 text-blue-400 mx-auto mb-3" />
-            <div className="text-2xl font-bold">Nasional</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Cakupan Seluruh RI</div>
+            <div className="text-2xl font-bold">Online</div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Akses Kapan Saja</div>
           </div>
           <div className="surface-elevated rounded-3xl p-6 text-center border border-white/5">
             <Rocket className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
-            <div className="text-2xl font-bold">Segera</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Wajib Launching</div>
+            <div className="text-2xl font-bold">Gratis</div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Untuk Masyarakat</div>
           </div>
         </motion.div>
 
@@ -233,7 +233,7 @@ export default function TestimoniPage() {
                       <Star key={i} className="w-3 h-3 fill-primary text-primary" />
                     ))}
                   </div>
-                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Diverifikasi Pemerintah</div>
+                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Pengguna Terverifikasi</div>
                 </div>
               </div>
             </motion.div>
@@ -250,11 +250,11 @@ export default function TestimoniPage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] rounded-full translate-x-1/2 -translate-y-1/2" />
           
           <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">
-            Waktu Tidak Bisa <span className="text-gradient">Menunggu Lagi.</span>
+            Punya Saran atau <span className="text-gradient">Pengalaman?</span>
           </h2>
           <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Setiap detik KUBOYAKO ditunda, kita kehilangan kesempatan untuk mengamankan aset bangsa. 
-            Bersama kita jemput masa depan sekarang juga.
+            Bantu kami meningkatkan KUBOYAKO dengan membagikan pengalaman Anda.
+            Masukan dari pengguna adalah kunci pengembangan sistem yang lebih baik.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -268,7 +268,7 @@ export default function TestimoniPage() {
           
           <div className="mt-12 flex items-center justify-center gap-8 opacity-40 grayscale group-hover:grayscale-0 transition-all">
              <Users className="w-8 h-8" />
-             <div className="text-xs font-bold uppercase tracking-[0.3em]">Didukung Oleh Seluruh Jajaran Aparatur Negara</div>
+             <div className="text-xs font-bold uppercase tracking-[0.3em]">Unit V Subdit Jatanras Ditkrimum Polda Sulsel</div>
           </div>
         </motion.div>
       </div>
@@ -276,7 +276,7 @@ export default function TestimoniPage() {
       {/* Footer Branding */}
       <footer className="py-12 text-center">
          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.5em] font-bold">
-           KUBOYAKO 2030 — ULTIMATE EDITION [VER-0405]
+           KUBOYAKO — RESMOB POLDA SULSEL — 2026
          </p>
       </footer>
     </div>

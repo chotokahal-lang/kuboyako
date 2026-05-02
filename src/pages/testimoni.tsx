@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Quote, Star, ShieldCheck, Zap, Globe, Rocket, Users, ChevronRight, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -56,6 +56,15 @@ const testimonials = [
 ];
 
 export default function TestimoniPage() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000); // Ganti setiap 5 detik
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className=\"min-h-screen bg-background relative overflow-x-hidden font-outfit\">
       {/* Dynamic Background Elements */}
@@ -65,6 +74,59 @@ export default function TestimoniPage() {
       </div>
 
       <div className=\"relative z-10 container mx-auto px-6 py-24\">
+        {/* Auto-Rotating Hero Testimonial */}
+        <div className=\"max-w-5xl mx-auto mb-24\">
+          <div className=\"relative h-[400px] md:h-[350px] flex items-center justify-center\">
+            <AnimatePresence mode=\"wait\">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 1.05, y: -20 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className=\"absolute inset-0\"
+              >
+                <div className=\"h-full surface-elevated rounded-[3.5rem] p-8 md:p-12 border border-primary/20 shadow-glow flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group\">
+                  <div className=\"absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] rounded-full translate-x-1/2 -translate-y-1/2\" />
+                  
+                  {/* Big Avatar */}
+                  <div className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] bg-gradient-to-br ${testimonials[activeIndex].accent} flex items-center justify-center text-4xl md:text-6xl font-black text-white shadow-2xl shrink-0`}>
+                    {testimonials[activeIndex].avatar}
+                  </div>
+
+                  <div className=\"flex-1 text-center md:text-left\">
+                    <div className=\"flex items-center justify-center md:justify-start gap-2 mb-4\">
+                       {[...Array(5)].map((_, i) => (
+                         <Star key={i} className=\"w-4 h-4 fill-primary text-primary animate-pulse\" style={{ animationDelay: `${i * 0.1}s` }} />
+                       ))}
+                    </div>
+                    
+                    <h2 className=\"text-xl md:text-3xl font-bold text-foreground mb-4 leading-relaxed\">
+                      \"{testimonials[activeIndex].content}\"
+                    </h2>
+                    
+                    <div>
+                      <h3 className=\"text-lg font-black text-primary uppercase tracking-wider\">{testimonials[activeIndex].name}</h3>
+                      <p className=\"text-xs text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1\">{testimonials[activeIndex].role}</p>
+                    </div>
+                  </div>
+
+                  {/* Indicator Dots */}
+                  <div className=\"absolute bottom-8 left-1/2 md:left-auto md:right-12 -translate-x-1/2 md:translate-x-0 flex gap-2\">
+                    {testimonials.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveIndex(i)}
+                        className={`h-1.5 rounded-full transition-all duration-500 ${i === activeIndex ? \"w-8 bg-primary\" : \"w-2 bg-white/20\"}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
         {/* Header Section */}
         <div className=\"max-w-4xl mx-auto text-center mb-24\">
           <motion.div

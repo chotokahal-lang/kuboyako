@@ -6,6 +6,7 @@ import {
   BookOpen,
   Monitor,
   Smartphone,
+  Star,
 } from "lucide-react";
 import { Logo3DImg } from "@/components/ui/logo-3d-img";
 import { LiveText } from "@/components/ui/live-text";
@@ -58,6 +59,37 @@ export default function Splash() {
             <LiveText as="span" id="splash-desc-1" defaultText="KUBOYAKO" className="font-bold text-foreground" /> — <LiveText as="span" id="splash-desc-2" defaultText="bahasa Makassar." />{" "}
             <LiveText as="span" id="splash-desc-3" defaultText="Boya" className="font-bold text-primary" /> = <LiveText as="i" id="splash-desc-4" defaultText="Cari" />. <LiveText as="span" id="splash-desc-5" defaultText="Sistem pencarian dan Arsip barang bukti tindak pidana pencurian wilayah hukum RESMOB POLDA SULSEL." />
           </p>
+        </motion.div>
+
+        {/* Featured Testimonial Card - High Visibility */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="w-full max-w-[320px] relative"
+        >
+          <Link to="/testimoni" className="block">
+            <div className="surface-elevated rounded-2xl p-4 border border-primary/30 shadow-glow bg-gradient-to-br from-primary/5 to-transparent relative group overflow-hidden">
+               <div className="absolute top-[-20px] right-[-20px] opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Star className="w-16 h-16 text-primary fill-primary" />
+               </div>
+               <div className="flex items-center gap-2 mb-2">
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="w-2 h-2 fill-primary text-primary" />)}
+                  </div>
+                  <span className="text-[8px] font-black text-primary uppercase tracking-widest">Suara Pemimpin</span>
+               </div>
+               <p className="text-[10px] text-foreground font-bold italic leading-relaxed mb-2">
+                 "KUBOYAKO adalah manifestasi kedaulatan digital bangsa. Launching sekarang juga!"
+               </p>
+               <div className="flex items-center justify-between">
+                  <span className="text-[8px] text-muted-foreground font-bold uppercase tracking-tighter">— Ahmad Wijaya, Men. Transformasi Digital</span>
+                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                     <ArrowRight className="w-3 h-3" />
+                  </div>
+               </div>
+            </div>
+          </Link>
         </motion.div>
       </div>
 

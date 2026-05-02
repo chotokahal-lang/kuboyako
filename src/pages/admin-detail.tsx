@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { AlertTriangle, FileText, MapPin, Calendar, User, ShieldCheck } from "lucide-react";
+import { AlertTriangle, FileText, MapPin, Calendar, User, ShieldCheck, Printer, Download, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { getEvidenceData, EvidenceItem } from "@/lib/store";
 import { PageHeader } from "@/components/layout/page-header";
@@ -76,6 +76,14 @@ export default function AdminDetail() {
         title={<LiveText as="span" id="admin-detail-title" defaultText="Barang Bukti" />}
         subtitle={<LiveText as="span" id="admin-detail-subtitle" defaultText="Terverifikasi · Catatan BAP Digital." />}
         back="/admin/riwayat"
+        right={
+          <button
+            onClick={() => window.print()}
+            className="w-11 h-11 surface-glass rounded-2xl flex items-center justify-center text-primary print:hidden"
+          >
+            <Printer className="w-5 h-5" />
+          </button>
+        }
       />
 
       <div className="px-6 relative z-10 space-y-5">
@@ -143,6 +151,25 @@ export default function AdminDetail() {
           </div>
         </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          .print\\:hidden { display: none !important; }
+          body { background: white !important; color: black !important; }
+          .surface, .surface-elevated, .surface-glass { 
+            border: 1px solid #eee !important; 
+            background: white !important; 
+            box-shadow: none !important;
+            color: black !important;
+          }
+          .text-muted-foreground { color: #666 !important; }
+          .text-foreground { color: black !important; }
+          .eyebrow { color: #888 !important; }
+          .ring-glow, .ring-1 { display: none !important; }
+          .display-font { color: black !important; }
+          .gradient-primary { background: black !important; color: white !important; }
+        }
+      `}} />
     </div>
   );
 }

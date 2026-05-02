@@ -185,13 +185,23 @@ export default function AdminRiwayat() {
                       className="w-14 h-14 object-contain shrink-0 drop-shadow-[0_8px_14px_rgba(0,0,0,0.5)]"
                     />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-foreground text-base tracking-tight uppercase truncate group-hover:text-primary transition-colors">
-                        {primary}
-                      </h3>
-                      <p className="text-xs text-muted-foreground truncate mt-0.5">{sub}</p>
-                      <p className="text-[10px] text-muted-foreground/70 truncate mt-1.5 font-medium">
-                        {item.noLp}
-                      </p>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <h3 className="font-bold text-foreground text-base tracking-tight uppercase truncate group-hover:text-primary transition-colors">
+                          {primary}
+                        </h3>
+                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded-md bg-accent/20 text-accent uppercase tracking-tighter shrink-0">
+                          Aktif
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground truncate">{sub}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="px-2 py-0.5 rounded-md surface-glass border border-white/5 text-[9px] font-bold text-muted-foreground uppercase truncate max-w-[120px]">
+                          {item.asalLp || "Resmob Polda"}
+                        </div>
+                        <p className="text-[9px] text-muted-foreground/60 font-mono">
+                          {new Date(item.createdAt).toLocaleDateString("id-ID")}
+                        </p>
+                      </div>
                     </div>
                       <div className="flex items-center gap-2">
                         <button

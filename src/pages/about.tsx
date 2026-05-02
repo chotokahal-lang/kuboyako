@@ -43,8 +43,8 @@ export default function About() {
                 <Rocket className="w-5 h-5" />
              </div>
              <div className="text-left">
-                <p className="eyebrow text-primary text-[10px] leading-none mb-1">Masa Depan</p>
-                <p className="text-sm font-bold text-foreground">Suara Pemimpin Bangsa</p>
+                <p className="eyebrow text-primary text-[10px] leading-none mb-1">Kesaksian Nyata</p>
+                <p className="text-sm font-bold text-foreground">Ulasan Tentang Aplikasi</p>
              </div>
           </div>
           <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/20 transition-colors">

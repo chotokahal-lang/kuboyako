@@ -4,59 +4,50 @@
 
 @layer base {
   :root {
-    /* ── Surface (sedikit lebih terang untuk layar Android) ── */
-    --background: 24 45% 6%;
-    /* warm very dark brown */
-    --foreground: 30 18% 97%;
-    /* near-white warm */
+    /* ── Surface (Modern Glassmorphism) ── */
+    --background: 230 40% 4%; /* Ultra dark navy */
+    --foreground: 210 20% 98%;
 
-    --card: 22 38% 10%;
-    --card-foreground: 30 18% 97%;
+    --card: 230 35% 7%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 22 42% 9%;
-    --popover-foreground: 30 18% 97%;
+    --popover: 230 40% 5%;
+    --popover-foreground: 210 20% 98%;
 
-    /* ── Brand ── */
-    --primary: 22 100% 52%;
-    /* #FF7000 — sedikit lebih terang */
-    --primary-foreground: 24 60% 6%;
-    --primary-glow: 32 100% 58%;
-    /* #FFA030 */
+    /* ── Brand (Elite Gold & Electric Blue) ── */
+    --primary: 42 100% 58%; /* Gold */
+    --primary-foreground: 230 40% 4%;
+    --primary-glow: 42 100% 70%;
 
-    --secondary: 18 100% 44%;
-    --secondary-foreground: 30 18% 98%;
+    --secondary: 217 91% 60%; /* Electric Blue */
+    --secondary-foreground: 210 20% 98%;
 
-    --accent: 42 100% 58%;
-    /* #FFD030 */
-    --accent-foreground: 24 60% 6%;
+    --accent: 199 89% 48%; /* Cyber Blue */
+    --accent-foreground: 210 20% 98%;
 
-    --muted: 24 18% 16%;
-    --muted-foreground: 30 10% 68%;
-    /* lebih terang agar mudah dibaca */
+    --muted: 230 20% 12%;
+    --muted-foreground: 215 15% 65%;
 
-    --destructive: 0 82% 58%;
-    --destructive-foreground: 30 18% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 20% 98%;
 
-    --border: 24 22% 17%;
-    --input: 24 22% 13%;
-    --ring: 22 100% 52%;
+    --border: 230 20% 15%;
+    --input: 230 20% 10%;
+    --ring: 42 100% 58%;
 
-    --radius: 1.5rem;
+    --radius: 1.75rem;
 
-    /* ── Gradients ── */
-    --gradient-primary: linear-gradient(135deg, hsl(22 100% 50%) 0%, hsl(32 100% 58%) 50%, hsl(42 100% 62%) 100%);
-    --gradient-deep: linear-gradient(160deg, hsl(22 55% 11%) 0%, hsl(24 48% 7%) 55%, hsl(20 60% 5%) 100%);
-    --gradient-card: linear-gradient(155deg, hsl(24 38% 14% / 0.85) 0%, hsl(20 32% 8% / 0.90) 100%);
-    --gradient-mesh: radial-gradient(ellipse 80% 55% at 50% 0%, hsl(22 100% 32% / 0.40) 0%, transparent 70%),
-      radial-gradient(ellipse 55% 45% at 100% 100%, hsl(42 100% 50% / 0.14) 0%, transparent 60%),
-      radial-gradient(ellipse 55% 45% at 0% 80%, hsl(18 100% 36% / 0.20) 0%, transparent 60%);
-
+    /* ── Gradients (Depth & Dimension) ── */
+    --gradient-primary: linear-gradient(135deg, hsl(42 100% 50%) 0%, hsl(45 100% 65%) 100%);
+    --gradient-deep: radial-gradient(circle at 50% -20%, hsl(217 91% 15% / 0.15) 0%, hsl(230 40% 4%) 80%);
+    --gradient-card: linear-gradient(165deg, hsl(230 20% 12% / 0.7) 0%, hsl(230 20% 6% / 0.85) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    
     /* ── Shadows ── */
-    --shadow-soft: 0 6px 20px -6px hsl(20 100% 4% / 0.55);
-    --shadow-elevated: 0 20px 44px -16px hsl(20 100% 4% / 0.65), 0 5px 12px -5px hsl(20 100% 4% / 0.45);
-    --shadow-glow: 0 18px 54px -12px hsl(22 100% 52% / 0.50);
-    --shadow-inset: inset 0 1px 0 hsl(30 100% 90% / 0.09), inset 0 -1px 0 hsl(20 100% 4% / 0.55);
-
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --shadow-elevated: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+    --shadow-glow: 0 0 40px -10px hsl(42 100% 58% / 0.4);
+    
     --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 
     --sidebar-background: 24 45% 6%;
@@ -94,13 +85,11 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    font-feature-settings: "ss01", "cv11";
-    background-image: var(--gradient-mesh), var(--gradient-deep);
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    background-image: var(--gradient-deep);
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
-    /* smoother font on Android */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -120,26 +109,25 @@
 @layer components {
   .surface {
     background: var(--gradient-card);
-    border: 1px solid hsl(30 20% 96% / 0.07);
-    box-shadow: var(--shadow-soft), var(--shadow-inset);
-    backdrop-filter: blur(20px) saturate(130%);
-    -webkit-backdrop-filter: blur(20px) saturate(130%);
+    border: 1px solid hsl(var(--border) / 0.4);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
 
   .surface-elevated {
     background: var(--gradient-card);
-    border: 1px solid hsl(30 20% 96% / 0.09);
-    box-shadow: var(--shadow-elevated), var(--shadow-inset);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: var(--shadow-elevated);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
   }
 
   .surface-glass {
-    background: hsl(30 20% 96% / 0.05);
-    border: 1px solid hsl(30 20% 96% / 0.09);
-    backdrop-filter: blur(16px) saturate(130%);
-    -webkit-backdrop-filter: blur(16px) saturate(130%);
-    box-shadow: var(--shadow-inset);
+    background: var(--gradient-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
   }
 
   /* ── Performance: reduce blur on low-end / battery-saver ── */

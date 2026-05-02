@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, ChevronRight, ShieldCheck, Bell } from "lucide-react";
+import { LogOut, ChevronRight, ShieldCheck, Bell, RefreshCcw } from "lucide-react";
 import { getEvidenceData, EvidenceItem } from "@/lib/store";
 import { Icon3D } from "@/components/ui/icon-3d";
 import { icons3d } from "@/assets/icons";
@@ -56,6 +56,13 @@ export default function AdminDashboard() {
     { title: "Log Aktivitas", desc: "Riwayat penggunaan sistem", href: "/admin/logs", icon: icons3d.archive },
     { title: "Status Penginputan", desc: "Riwayat & arsip data BB", href: "/admin/riwayat", icon: icons3d.archive },
   ];
+
+  const handleResetSystem = () => {
+    if (confirm("⚠️ PERINGATAN: Seluruh data (Barang Bukti, Akun, Logs) akan dihapus dan dikembalikan ke kondisi awal. Lanjutkan?")) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-full pb-10">

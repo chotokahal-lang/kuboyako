@@ -227,7 +227,12 @@ const initialData: EvidenceItem[] = [
 export function getEvidenceData(): EvidenceItem[] {
   const stored = localStorage.getItem("kuboyako_evidence");
   if (stored) {
-    return JSON.parse(stored);
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error("Failed to parse evidence data", e);
+      localStorage.removeItem("kuboyako_evidence");
+    }
   }
   localStorage.setItem("kuboyako_evidence", JSON.stringify(initialData));
   return initialData;
@@ -316,7 +321,14 @@ const initialAccounts: UserAccount[] = [
 
 export function getUserAccounts(): UserAccount[] {
   const stored = localStorage.getItem("kuboyako_accounts");
-  if (stored) return JSON.parse(stored);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error("Failed to parse account data", e);
+      localStorage.removeItem("kuboyako_accounts");
+    }
+  }
   localStorage.setItem("kuboyako_accounts", JSON.stringify(initialAccounts));
   return initialAccounts;
 }
@@ -342,7 +354,15 @@ export function validateLogin(nrp: string, pass: string): UserAccount | undefine
 
 export function getLogs(): SystemLog[] {
   const stored = localStorage.getItem("kuboyako_logs");
-  return stored ? JSON.parse(stored) : [];
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error("Failed to parse logs data", e);
+      localStorage.removeItem("kuboyako_logs");
+    }
+  }
+  return [];
 }
 
 export function addLog(user: string, role: string, action: string, details: string) {

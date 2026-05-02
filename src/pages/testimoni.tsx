@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Quote, Star, ShieldCheck, Zap, Globe, Rocket, Users, ChevronRight, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { LiveText } from "@/components/ui/live-text";
+import { Logo3DImg } from "@/components/ui/logo-3d-img";
 
 const testimonials = [
   {
@@ -67,10 +69,15 @@ export default function TestimoniPage() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden font-outfit">
-      {/* Dynamic Background Elements */}
-      <div className="fixed inset-0 pointer-events-none opacity-30">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[150px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+      {/* Cinematic Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Mesh Gradients */}
+        <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[30%] right-[-5%] w-[40%] h-[40%] bg-orange-500/5 blur-[100px] rounded-full animate-pulse" style={{ animationDelay: '4s' }} />
+        
+        {/* Animated Grid Overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 contrast-150 brightness-100" />
       </div>
 
       <div className="relative z-10 container mx-auto px-6 py-24">
@@ -102,12 +109,16 @@ export default function TestimoniPage() {
                     </div>
                     
                     <h2 className="text-xl md:text-3xl font-bold text-foreground mb-4 leading-relaxed">
-                      "{testimonials[activeIndex].content}"
+                      <LiveText id={`testi-hero-content-${activeIndex}`} defaultText={`"${testimonials[activeIndex].content}"`} />
                     </h2>
                     
                     <div>
-                      <h3 className="text-lg font-black text-primary uppercase tracking-wider">{testimonials[activeIndex].name}</h3>
-                      <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1">{testimonials[activeIndex].role}</p>
+                      <h3 className="text-lg font-black text-primary uppercase tracking-wider">
+                        <LiveText id={`testi-hero-name-${activeIndex}`} defaultText={testimonials[activeIndex].name} />
+                      </h3>
+                      <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.2em] mt-1">
+                        <LiveText id={`testi-hero-role-${activeIndex}`} defaultText={testimonials[activeIndex].role} />
+                      </p>
                     </div>
                   </div>
 
@@ -143,19 +154,18 @@ export default function TestimoniPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-tight"
+            className="text-5xl md:text-8xl font-black mb-8 tracking-tight leading-tight"
           >
-            Suara Para <span className="text-gradient">Pemimpin Bangsa</span>
+            <LiveText id="testi-page-title-1" defaultText="Suara Para" /> <span className="text-gradient"><LiveText id="testi-page-title-2" defaultText="Pemimpin Bangsa" /></span>
           </motion.h1>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xl text-muted-foreground leading-relaxed"
+            className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto"
           >
-            Dari meja menteri hingga pelosok daerah, KUBOYAKO diakui sebagai pilar utama transformasi digital Indonesia. 
-            Era baru keamanan dan transparansi telah tiba—saatnya bergerak sekarang juga.
+            <LiveText id="testi-page-desc" defaultText="Dari meja menteri hingga pelosok daerah, KUBOYAKO diakui sebagai pilar utama transformasi digital Indonesia. Era baru keamanan dan transparansi telah tiba—saatnya bergerak sekarang juga." />
           </motion.p>
         </div>
 
@@ -209,14 +219,18 @@ export default function TestimoniPage() {
                     {t.avatar}
                   </div>
                   <div>
-                    <h3 className="font-bold text-base leading-tight">{t.name}</h3>
-                    <p className="text-[10px] text-primary font-black uppercase tracking-widest mt-1">{t.role}</p>
+                    <h3 className="font-bold text-base leading-tight">
+                      <LiveText id={`testi-grid-name-${i}`} defaultText={t.name} />
+                    </h3>
+                    <p className="text-[10px] text-primary font-black uppercase tracking-widest mt-1">
+                      <LiveText id={`testi-grid-role-${i}`} defaultText={t.role} />
+                    </p>
                   </div>
                 </div>
 
                 <div className="relative">
                   <p className="text-base leading-relaxed text-foreground/90 italic">
-                    "{t.content}"
+                    <LiveText id={`testi-grid-content-${i}`} defaultText={`"${t.content}"`} />
                   </p>
                 </div>
 
